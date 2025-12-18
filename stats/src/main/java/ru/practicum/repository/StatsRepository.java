@@ -16,7 +16,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             "CASE WHEN :unique = true THEN COUNT(DISTINCT h.ip) ELSE COUNT(h.ip) END) " +
             "FROM EndpointHit h " +
             "WHERE h.timestamp BETWEEN :start AND :end " +
-            "AND (:uris IS NULL OR h.uri IN :uris) " +
+            "AND (:uris IS NULL OR :uris IS EMPTY OR h.uri IN :uris) " +
             "GROUP BY h.app, h.uri " +
             "ORDER BY " +
             "CASE WHEN :unique = true THEN COUNT(DISTINCT h.ip) ELSE COUNT(h.ip) END DESC")
