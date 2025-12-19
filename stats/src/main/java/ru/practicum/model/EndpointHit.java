@@ -22,6 +22,9 @@ public class EndpointHit {
     @Column(name = "app", nullable = false)
     String app;
 
+    @Column(name = "uri", nullable = false, length = 500)
+    String uri;
+
     @Column(name = "ip", nullable = false, length = 45)
     String ip;
 
