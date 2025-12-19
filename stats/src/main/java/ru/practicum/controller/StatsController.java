@@ -34,7 +34,8 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public ResponseEntity<ViewStats> getStats(
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<ViewStats>> getStats(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             LocalDateTime start,
 
@@ -48,6 +49,6 @@ public class StatsController {
 
         List<ViewStats> stats = statsService.getStats(start, end, uris, unique);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok(stats);
     }
 }
