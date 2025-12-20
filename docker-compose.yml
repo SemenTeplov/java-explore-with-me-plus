@@ -22,10 +22,10 @@ services:
       - POSTGRES_USER=stats
       - POSTGRES_DB=stats
 
-  ewm-server:
-    build: ewm-server
-    image: ewm-server
-    container_name: ewm-server
+  ewm-service:
+    build: ewm-service
+    image: ewm-service
+    container_name: ewm-service
     ports:
       - "8080:8080"
     depends_on:
