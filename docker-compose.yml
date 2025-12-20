@@ -4,7 +4,7 @@ services:
     image: stats-service
     container_name: stats-service
     ports:
-      - "8080:9090"
+      - "9090:9090"
     depends_on:
       - stats-db
     environment:
@@ -22,18 +22,18 @@ services:
       - POSTGRES_USER=stats
       - POSTGRES_DB=stats
 
-#  ewm-service:
-#    build: ewm-service
-#    image: ewm-service
-#    container_name: ewm-service
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - stats-service
-#      - ewm-db
-#
-#  ewm-db:
-#    image: postgres:16.1
-#    container_name: postgres-emv
-#    ports:
-#      - "5433:5433"
+  ewm-service:
+    build: ewm-service
+    image: ewm-service
+    container_name: ewm-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - stats-service
+      - ewm-db
+
+  ewm-db:
+    image: postgres:16.1
+    container_name: postgres-emv
+    ports:
+      - "5433:5433"
