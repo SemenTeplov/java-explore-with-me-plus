@@ -14,7 +14,7 @@ services:
 
   stats-db:
     image: postgres:16.1
-    container_name: postgres16
+    container_name: postgres-stats
     ports:
       - "5432:5432"
     environment:
@@ -23,8 +23,16 @@ services:
       - POSTGRES_DB=stats
 
   ewm-service:
+    build: ewm-server
+    image: ewm-server
+    container_name: ewm-server
     ports:
       - "8080:8080"
+    depends_on:
+      - ewm-db
 
   ewm-db:
     image: postgres:16.1
+    container_name: postgres-emv
+    ports:
+      - "5433:5433"
