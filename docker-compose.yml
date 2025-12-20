@@ -2,7 +2,7 @@ services:
   stats-server:
     build: stats-service
     image: stats-service
-    container_name: stats-server
+    container_name: stats-service
     ports:
       - "8080:9090"
     depends_on:
@@ -23,13 +23,13 @@ services:
       - POSTGRES_DB=stats
 
 #  ewm-service:
-#    build: ewm-server
-#    image: ewm-server
-#    container_name: ewm-server
+#    build: ewm-service
+#    image: ewm-service
+#    container_name: ewm-service
 #    ports:
 #      - "8080:8080"
 #    depends_on:
-#      - stats-server
+#      - stats-service
 #      - ewm-db
 #
 #  ewm-db:
