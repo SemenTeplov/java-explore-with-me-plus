@@ -12,7 +12,7 @@
     <artifactId>ewm-service</artifactId>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ewm-server</name>
+    <name>ewm-service</name>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
