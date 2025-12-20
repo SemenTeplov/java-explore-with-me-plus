@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
 
-    @Query("SELECT new ru.practicum.dto.ViewStats(" +
+    @Query(nativeQuery = true, value = "SELECT new ru.practicum.dto.ViewStats(" +
             "h.app, h.uri, " +
             "CASE WHEN :unique = true THEN COUNT(DISTINCT h.ip) ELSE COUNT(h.ip) END) " +
             "FROM EndpointHit h " +
