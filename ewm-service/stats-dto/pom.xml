@@ -5,16 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ru.practicum</groupId>
-        <artifactId>stats</artifactId>
+        <artifactId>ewm-service</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>stats.client</groupId>
-    <artifactId>stats-client</artifactId>
+    <groupId>stats.dto</groupId>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>stats-client</name>
+    <name>stats-dto</name>
+    <artifactId>stats-dto</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -22,16 +22,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>stats.dto</groupId>
-            <artifactId>stats-dto</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
-
     <build>
-        <sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>main/java</sourceDirectory>
 
         <plugins>
             <plugin>
