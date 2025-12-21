@@ -28,7 +28,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
 //            @Param("unique") boolean unique);
 
     @Query(nativeQuery = true, value = """
-            SELECT app, uri, COUNT(uri) AS hits 
+            SELECT app, uri, COUNT(uri) AS hits
             FROM hits
             WHERE timestamp BETWEEN :start AND :end
             GROUP BY uri""")
