@@ -10,13 +10,22 @@
     </parent>
 
     <artifactId>ewm-service</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>stats</name>
+    <name>main-service</name>
 
-    <modules>
-        <module>stats-server</module>
-        <module>stats-dto</module>
-        <module>stats-client</module>
-    </modules>
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
 </project>

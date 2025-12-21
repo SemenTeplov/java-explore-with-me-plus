@@ -32,7 +32,7 @@ services:
       - stats-server
       - main-db
 
-  main-db:
+  ewm-db:
     image: postgres:16.1
     container_name: postgres-emv
     ports:
