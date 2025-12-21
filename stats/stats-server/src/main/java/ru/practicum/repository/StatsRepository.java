@@ -11,30 +11,29 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
-
-//    @Query("SELECT new ru.practicum.dto.ViewStats(" +
-//            "h.app, h.uri, " +
-//            "CASE WHEN :unique = true THEN COUNT(DISTINCT h.ip) ELSE COUNT(h.ip) END) " +
-//            "FROM EndpointHit h " +
-//            "WHERE h.timestamp BETWEEN :start AND :end " +
-//            "AND (:uris IS NULL OR :uris IS EMPTY OR h.uri IN :uris) " +
-//            "GROUP BY h.app, h.uri " +
-//            "ORDER BY " +
-//            "CASE WHEN :unique = true THEN COUNT(DISTINCT h.ip) ELSE COUNT(h.ip) END DESC")
-//    List<ViewStats> getStats(
-//            @Param("start") LocalDateTime start,
-//            @Param("end") LocalDateTime end,
-//            @Param("uris") List<String> uris,
-//            @Param("unique") boolean unique);
-
     @Query(nativeQuery = true, value = """
-            SELECT app, uri, COUNT(*) AS hits
+            SELECT app, uri,
+            CASE WHEN :unique = true THEN COUNT(DISTINCT ip) ELSE COUNT(ip) END AS hits
             FROM hits
-            WHERE timestamp BETWEEN :start AND :end
-            AND (:uris IS NULL OR uri in :uris)
-            GROUP BY app, uri""")
+            WHERE hit_time BETWEEN :start AND :end
+            AND uri = ANY(:uris)
+            GROUP BY app, uri
+            ORDER BY hits DESC""")
     List<ViewStats> getStats(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end,
-            @Param("uris") List<String> uris);
+            @Param("uris") String[] uris,
+            @Param("unique") Boolean unique);
+
+    @Query(nativeQuery = true, value = """
+            SELECT app, uri,
+            CASE WHEN :unique = true THEN COUNT(DISTINCT ip) ELSE COUNT(ip) END AS hits
+            FROM hits
+            WHERE hit_time BETWEEN :start AND :end
+            GROUP BY app, uri
+            ORDER BY hits DESC""")
+    List<ViewStats> getStatsWithoutUris(
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            @Param("unique") Boolean unique);
 }

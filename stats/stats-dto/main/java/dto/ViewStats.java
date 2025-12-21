@@ -1,19 +1,9 @@
 package dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
+public interface ViewStats {
+    String getApp();
 
-@Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor
-@NoArgsConstructor
-public class ViewStats {
-    String app;
+    String getUri();
 
-    String uri;
-
-    Long hits;
+    Long getHits();
 }

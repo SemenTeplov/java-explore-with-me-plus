@@ -26,16 +26,23 @@ public class StatsServiceImpl implements StatsService {
 
     private final StatsMapper mapper;
 
+    @Override
     public void saveHit(EndpointHitDto hitDto) {
         statsRepository.save(mapper.endpointHitDtoToEndpointHit(hitDto));
     }
 
+    @Override
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (start.isAfter(end)) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, Messages.DATE_EXCEPTION);
         }
 
-        return statsRepository.getStats(start, end, uris);
+        if (uris != null) {
+            return statsRepository.getStats(start, end, uris.toArray(new String[0]), unique);
+        } else {
+            return statsRepository.getStatsWithoutUris(start, end, unique);
+        }
+
     }
 }
