@@ -28,13 +28,13 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
 //            @Param("unique") boolean unique);
 
     @Query(nativeQuery = true, value = """
-            SELECT app, uri, COUNT(uri) AS hits
+            SELECT app, uri, COUNT(*) AS hits
             FROM hits
             WHERE timestamp BETWEEN :start AND :end
-            GROUP BY uri""")
+            AND (:uris IS NULL OR uri in :uris)
+            GROUP BY app, uri""")
     List<ViewStats> getStats(
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end,
-            @Param("uris") List<String> uris,
-            @Param("unique") boolean unique);
+            @Param("uris") List<String> uris);
 }

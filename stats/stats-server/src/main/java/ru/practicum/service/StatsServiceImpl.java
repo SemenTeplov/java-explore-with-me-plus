@@ -36,6 +36,6 @@ public class StatsServiceImpl implements StatsService {
                     HttpStatus.BAD_REQUEST, Messages.DATE_EXCEPTION);
         }
 
-        return statsRepository.getStats(start, end, uris, unique);
+        return statsRepository.getStats(start, end, uris);
     }
 }

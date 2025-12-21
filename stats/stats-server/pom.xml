@@ -56,7 +56,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>4.0.0</version>
                 <configuration>
-                    <mainClass>ru.practicum.Main</mainClass>
+                    <mainClass>main.java.ru.practicum.Main</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

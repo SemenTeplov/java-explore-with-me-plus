@@ -1,5 +1,7 @@
 package dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotBlank;
 
 import lombok.AccessLevel;
@@ -26,5 +28,6 @@ public class EndpointHitDto {
     @NotBlank
     String ip;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime timestamp;
 }
