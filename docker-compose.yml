@@ -1,5 +1,5 @@
 services:
-  stats:
+  stats-server:
     build: stats
     image: stats
     container_name: stats
