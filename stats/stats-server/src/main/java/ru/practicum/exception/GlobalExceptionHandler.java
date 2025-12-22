@@ -1,12 +1,17 @@
 package main.java.ru.practicum.exception;
 
 import constant.Messages;
+
 import dto.ExceptionDto;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.hibernate.exception.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -24,6 +29,39 @@ public class GlobalExceptionHandler {
                         HttpStatus.UNPROCESSABLE_ENTITY.value(),
                         LocalDateTime.now()),
                 HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException  e) {
+        log.error(Messages.MESSAGE_NOT_VALID, e.getMessage());
+
+        return new ResponseEntity<>(
+                new ExceptionDto(Messages.EXCEPTION_NOT_VALID,
+                        HttpStatus.BAD_REQUEST.value(),
+                        LocalDateTime.now()),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ExceptionDto> handleHttpMessageNotReadableException(HttpMessageNotReadableException  e) {
+        log.error(Messages.MESSAGE_NOT_READABLE, e.getMessage());
+
+        return new ResponseEntity<>(
+                new ExceptionDto(Messages.EXCEPTION_NOT_READABLE,
+                        HttpStatus.BAD_REQUEST.value(),
+                        LocalDateTime.now()),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ExceptionDto> handleConstraintViolationException(ConstraintViolationException  e) {
+        log.error(Messages.MESSAGE_CONSTRAINT_VIOLATION, e.getMessage());
+
+        return new ResponseEntity<>(
+                new ExceptionDto(Messages.EXCEPTION_CONSTRAINT_VIOLATION,
+                        HttpStatus.BAD_REQUEST.value(),
+                        LocalDateTime.now()),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

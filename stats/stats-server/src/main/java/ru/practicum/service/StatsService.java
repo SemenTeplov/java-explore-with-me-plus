@@ -1,4 +1,4 @@
-package service;
+package main.java.ru.practicum.service;
 
 import dto.EndpointHitDto;
 import dto.ViewStats;

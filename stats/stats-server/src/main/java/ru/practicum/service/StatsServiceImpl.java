@@ -14,8 +14,6 @@ import dto.ViewStats;
 import main.java.ru.practicum.mapper.StatsMapper;
 import main.java.ru.practicum.repository.StatsRepository;
 
-import service.StatsService;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

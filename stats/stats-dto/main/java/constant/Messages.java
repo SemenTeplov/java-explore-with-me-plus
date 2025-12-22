@@ -10,4 +10,10 @@ public class Messages {
     public static final String MESSAGE_INTERNAL_SERVER = "Внутренняя ошибка сервера: {} ";
     public static final String EXCEPTION_UNPROCESSABLE_ENTITY = "Недопустимый аргумент.";
     public static final String MESSAGE_UNPROCESSABLE_ENTITY = "Некорректный аргумент: {}";
+    public static final String EXCEPTION_NOT_VALID = "Валидация не пройдена. Недопустимое значение.";
+    public static final String MESSAGE_NOT_VALID = "Значение не прошло валидацию: {}";
+    public static final String EXCEPTION_NOT_READABLE = "Тело запроса не читаемо.";
+    public static final String MESSAGE_NOT_READABLE = "Тело запроса не читаемо: {}";
+    public static final String EXCEPTION_CONSTRAINT_VIOLATION = "Недопустимое значение.";
+    public static final String MESSAGE_CONSTRAINT_VIOLATION = "Недопустимое значение: {}";
 }
