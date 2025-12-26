@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
+/*    private final UserRepository userRepository;
 
     public UserDto addUser(NewUserRequest newUserRequest) {
         return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(newUserRequest)));
@@ -27,5 +27,5 @@ public class UserService {
             throw new NotFoundException(String.format("Пользователь с id=%d не найден", userId));
         }
         userRepository.deleteById(userId);
-    }
+    }*/
 }

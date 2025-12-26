@@ -15,8 +15,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class UserController implements UserApi {
-
+public class UserController /*implements UserApi*/ {
+/*
     @Override
     public ResponseEntity<Void> _deleteUser(Long userId) {
         log.info("DELETE /admin.users/{}", userId);
@@ -41,5 +41,5 @@ public class UserController implements UserApi {
         log.info("POST /admin/users with request: {}", newUserRequest);
         UserDto userDto = userService.addUser(newUserRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
-    }
+    }*/
 }
