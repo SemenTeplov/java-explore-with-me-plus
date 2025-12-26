@@ -1,4 +1,4 @@
-package ru.practicum.user;
+package main.java.ru.practicum.user;
 
 import jakarta.persistence.*;
 import lombok.*;

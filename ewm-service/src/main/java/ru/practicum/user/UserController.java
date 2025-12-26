@@ -1,11 +1,11 @@
-package ru.practicum.user;
+package main.java.ru.practicum.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import main.java.ru.practicum.user.dto.GetUsersRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.openapi.model.GetUserRequest;
 import ru.practicum.openapi.model.NewUserRequest;
 import ru.practicum.openapi.model.UserDto;
 import ru.practicum.openapi.api.UserApi;
@@ -15,8 +15,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class UserController /*implements UserApi*/ {
-/*
+public class UserController implements UserApi {
+    private final UserService userService;
+
     @Override
     public ResponseEntity<Void> _deleteUser(Long userId) {
         log.info("DELETE /admin.users/{}", userId);
@@ -32,7 +33,8 @@ public class UserController /*implements UserApi*/ {
 
         log.info("GET /admin/users?ids={}&from={}&size={}", ids, from, size);
 
-        List<UserDto> users = userService.getUsers(ids, from, size);
+        GetUsersRequest request = new GetUsersRequest(ids, from, size);
+        List<UserDto> users = userService.getUsers(request);
         return ResponseEntity.ok(users);
     }
 
@@ -41,5 +43,5 @@ public class UserController /*implements UserApi*/ {
         log.info("POST /admin/users with request: {}", newUserRequest);
         UserDto userDto = userService.addUser(newUserRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
-    }*/
+    }
 }

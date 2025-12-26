@@ -1,11 +1,11 @@
-package ru.practicum.dto;
+package main.java.ru.practicum.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.constant.Values;
+import main.java.ru.practicum.constant.Values;
 
 import java.time.LocalDateTime;
 

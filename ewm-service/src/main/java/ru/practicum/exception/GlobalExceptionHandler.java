@@ -1,4 +1,4 @@
-package ru.practicum.exception;
+package main.java.ru.practicum.exception;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.constant.Messages;
-import ru.practicum.dto.ExceptionDto;
+import main.java.ru.practicum.constant.Messages;
+import main.java.ru.practicum.dto.ExceptionDto;
 
 import java.time.LocalDateTime;
 

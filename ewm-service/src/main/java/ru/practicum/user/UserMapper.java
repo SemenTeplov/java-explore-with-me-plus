@@ -1,9 +1,9 @@
-package ru.practicum.user;
+package main.java.ru.practicum.user;
 
 import lombok.experimental.UtilityClass;
+import main.java.ru.practicum.user.dto.UserShortDto;
 import ru.practicum.openapi.model.NewUserRequest;
 import ru.practicum.openapi.model.UserDto;
-import ru.practicum.user.dto.UserShortDto;
 
 @UtilityClass
 public class UserMapper {
