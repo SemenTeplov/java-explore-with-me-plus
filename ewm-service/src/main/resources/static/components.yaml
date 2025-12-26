@@ -1,190 +1,6 @@
 components:
   schemas:
 
-#-----Requests-----
-
-    GetCompilationRequest:
-      type: object
-      description: Запрос получения событий
-      required:
-        - pinned
-        - from
-        - size
-      properties:
-        pinned:
-          type: boolean
-          example: "true"
-          description: Искать только закрепленные/не закрепленные подборки.
-        from:
-          type: integer
-          format: int32
-          default: 0
-          example: "10"
-          description: Количество элементов, которые нужно пропустить для формирования текущего набора.
-        size:
-          type: integer
-          format: int32
-          default: 10
-          example: "10"
-          description: Количество элементов в наборе.
-
-    GetItemsRequest:
-      type: object
-      description: Запрос получения элементов
-      required:
-        - from
-        - size
-      properties:
-        from:
-          type: integer
-          format: int32
-          default: 0
-          example: "2"
-          description: Количество элементов, которые нужно пропустить для формирования текущего набора.
-        size:
-          type: integer
-          format: int32
-          default: 10
-          example: "12"
-          description: Количество элементов в наборе.
-
-    GetEventRequest:
-      type: object
-      description: Запрос получения событий
-      required:
-        - users
-        - states
-        - categories
-        - rangeStart
-        - rangeEnd
-        - from
-        - size
-      properties:
-        users:
-          type: array
-          items:
-            type: integer
-          example: "[1, 3, 5]"
-          description: Список id пользователей, чьи события нужно найти.
-        states:
-          type: array
-          items:
-            type: string
-          example: "[сделано, ожидает]"
-          description: Список состояний в которых находятся искомые события.
-        categories:
-          type: array
-          items:
-            type: integer
-          example: "[1, 3, 5]"
-          description: Список id категорий в которых будет вестись поиск.
-        rangeStart:
-          type: string
-          example: "2022-09-06 11:00:23"
-          description: Дата и время не раньше которых должно произойти событие.
-        rangeEnd:
-          type: string
-          example: "2022-09-06 11:00:23"
-          description: Дата и время не позже которых должно произойти событие.
-        from:
-          type: integer
-          format: int32
-          default: 0
-          example: "2"
-          description: Количество событий, которые нужно пропустить для формирования текущего набора.
-        size:
-          type: integer
-          format: int32
-          default: 10
-          example: "12"
-          description: Количество событий в наборе.
-
-    GetEventWithFilterRequest:
-      type: object
-      description: Запрос получения событий с возможностью фильтрации
-      required:
-        - text
-        - categories
-        - paid
-        - rangeStart
-        - rangeEnd
-        - onlyAvailable
-        - sort
-        - from
-        - size
-      properties:
-        text:
-          type: string
-          example: "какой-то текст"
-          description: Текст для поиска в содержимом аннотации и подробном описании события.
-        categories:
-          type: array
-          items:
-            type: integer
-          example: "[1, 3, 5]"
-          description: Список id категорий в которых будет вестись поиск.
-        paid:
-          type: boolean
-          example: "false"
-          description: Поиск только платных/бесплатных событий.
-        rangeStart:
-          type: string
-          example: "2022-09-06 11:00:23"
-          description: Дата и время не раньше которых должно произойти событие.
-        rangeEnd:
-          type: string
-          example: "2022-09-06 11:00:23"
-          description: Дата и время не позже которых должно произойти событие.
-        onlyAvailable:
-          type: boolean
-          default: false
-          example: "false"
-          description: Только события у которых не исчерпан лимит запросов на участие.
-        sort:
-          type: string
-          enum: [ EVENT_DATE, VIEWS ]
-          example: "EVENT_DATE"
-          description: Вариант сортировки - по дате события или по количеству просмотров.
-        from:
-          type: integer
-          format: int32
-          default: 0
-          example: "2"
-          description: Количество событий, которые нужно пропустить для формирования текущего набора.
-        size:
-          type: integer
-          format: int32
-          default: 10
-          example: "12"
-          description: Количество событий в наборе.
-
-    GetUserRequest:
-      type: object
-      description: Запрос получения информации о пользователе
-      required:
-        - ids
-        - from
-        - size
-      properties:
-        ids:
-          type: array
-          items:
-            type: integer
-          example: "[1, 3, 5]"
-          description: id пользователей.
-        from:
-          type: integer
-          format: int32
-          default: 0
-          example: "2"
-          description: Количество пользователей, которые нужно пропустить для формирования текущего набора.
-        size:
-          type: integer
-          format: int32
-          default: 10
-          example: "12"
-          description: Количество пользователей в наборе.
-
 #-----Responses-----
 
     CompilationDto:
@@ -207,14 +23,17 @@ components:
       id:
         type: integer
         format: int64
+        required: true
         example: 1
         description: Идентификатор
       pinned:
         type: boolean
+        required: true
         example: true
         description: Закреплена ли подборка на главной странице сайта
       title:
         type: string
+        required: true
         example: Летние концерты
         description: Заголовок подборки
 
@@ -234,6 +53,7 @@ components:
       properties:
         annotation:
           type: string
+          required: true
           example: Эксклюзивность нашего шоу гарантирует привлечение максимальной зрительской аудитории
           description: Краткое описание
         category:
@@ -242,6 +62,7 @@ components:
               schema:
                 $ref: 'components.yaml#/components/schemas/CategoryDto'
                 type: object
+                required: true
         confirmedRequests:
           type: integer
           format: int64
@@ -249,6 +70,7 @@ components:
           description: Количество одобренных заявок на участие в данном событии
         eventDate:
           type: string
+          required: true
           example: 2024-12-31 15:10:05
           description: Дата и время на которые намечено событие (в формате "yyyy-MM-dd HH:mm:ss")
         id:
@@ -264,10 +86,12 @@ components:
                 type: object
         paid:
           type: boolean
+          required: true
           example: true
           description: Нужно ли оплачивать участие
         title:
           type: string
+          required: true
           example: Знаменитое шоу 'Летающая кукуруза'
           description: Заголовок
         views:
@@ -291,6 +115,7 @@ components:
           description: Идентификатор категории
         name:
           type: string
+          required: true
           maxLength: 50
           minLength: 1
           example: Концерты
@@ -306,10 +131,12 @@ components:
         id:
           type: integer
           format: int64
+          required: true
           example: 1
           description: Идентификатор
         name:
           type: string
+          required: true
           example: Фёдоров Матвей
           description: Имя
 
@@ -325,6 +152,7 @@ components:
           type: array
           items:
             type: integer
+            format: int64
             example: "[ 1, 2, 3 ]"
           uniqueItems: true
           description: Подборка событий
@@ -335,6 +163,7 @@ components:
           description: Закреплена ли подборка на главной странице сайта
         title:
           type: string
+          required: true
           maxLength: 50
           minLength: 1
           example: Летние концерты
@@ -352,6 +181,7 @@ components:
           type: array
           items:
             type: integer
+            format: int64
             example: "[ 1, 2, 3 ]"
           uniqueItems: true
           description: Список id событий подборки для полной замены текущего списка
@@ -374,6 +204,7 @@ components:
         - name
       properties:
         type: string
+        required: true
         maxLength: 50
         minLength: 1
         example: Концерты
@@ -395,6 +226,7 @@ components:
       properties:
         annotation:
           type: string
+          required: true
           maxLength: 2000
           minLength: 20
           example: Сплав на байдарках похож на полет.
@@ -402,16 +234,19 @@ components:
         category:
           type: integer
           format: int64
+          required: true
           example: 2
           description: id категории к которой относится событие
         description:
           type: string
+          required: true
           maxLength: 7000
           minLength: 20
           example: Сплав на байдарках похож на полет. На спокойной воде — это парение. На бурной, порожистой — выполнение фигур высшего пилотажа. И то, и другое дарят чувство обновления, феерические эмоции, яркие впечатления.
           description: Полное описание события
         eventDate:
           type: string
+          required: true
           example: 2024-12-31 15:10:05
           description: Дата и время на которые намечено событие. Дата и время указываются в формате "yyyy-MM-dd HH:mm:ss"
         location:
@@ -420,6 +255,7 @@ components:
               schema:
                 $ref: 'components.yaml#/components/schemas/Location'
                 type: object
+                required: true
         paid:
           type: boolean
           example: true
@@ -438,6 +274,7 @@ components:
           description: Нужна ли пре-модерация заявок на участие. Если true, то все заявки будут ожидать подтверждения инициатором события. Если false - то будут подтверждаться автоматически.
         title:
           type: string
+          required: true
           maxLength: 120
           minLength: 3
           example: Сплав на байдарках
@@ -484,6 +321,7 @@ components:
       properties:
         annotation:
           type: string
+          required: true
           example: Эксклюзивность нашего шоу гарантирует привлечение максимальной зрительской аудитории
           description: Краткое описание
         category:
@@ -507,6 +345,7 @@ components:
           description: Полное описание события
         eventDate:
           type: string
+          required: true
           example: 2024-12-31 15:10:05
           description: Дата и время на которые намечено событие (в формате "yyyy-MM-dd HH:mm:ss")
         id:
@@ -520,14 +359,17 @@ components:
               schema:
                 $ref: 'components.yaml#/components/schemas/UserShortDto'
                 type: object
+                required: true
         location:
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/Location'
                 type: object
+                required: true
         paid:
           type: boolean
+          required: true
           example: true
           description: Нужно ли оплачивать участие
         participantLimit:
@@ -552,6 +394,7 @@ components:
           description: Список состояний жизненного цикла события
         title:
           type: string
+          required: true
           example: Знаменитое шоу 'Летающая кукуруза'
           description: Заголовок
         views:
@@ -777,6 +620,7 @@ components:
       properties:
         email:
           type: string
+          required: true
           example: petrov.i@practicummail.ru
           description: Почтовый адрес
         id:
@@ -787,6 +631,7 @@ components:
           description: Идентификатор
         name:
           type: string
+          required: true
           example: Петров Иван
           description: Имя
 
@@ -799,12 +644,14 @@ components:
       properties:
         email:
           type: string
+          required: true
           maxLength: 254
           minLength: 6
           example: ivan.petrov@practicummail.ru
           description: Почтовый адрес
         name:
           type: string
+          required: true
           maxLength: 250
           minLength: 2
           example: Иван Петров
@@ -836,6 +683,7 @@ components:
           description: Общее описание причины ошибки
         status:
           type: string
+          enum: [ 100 CONTINUE, 101 SWITCHING_PROTOCOLS, 102 PROCESSING, 103 CHECKPOINT, 200 OK, 201 CREATED, 202 ACCEPTED, 203 NON_AUTHORITATIVE_INFORMATION, 204 NO_CONTENT, 205 RESET_CONTENT, 206 PARTIAL_CONTENT, 207 MULTI_STATUS, 208 ALREADY_REPORTED, 226 IM_USED, 300 MULTIPLE_CHOICES, 301 MOVED_PERMANENTLY, 302 FOUND, 302 MOVED_TEMPORARILY, 303 SEE_OTHER, 304 NOT_MODIFIED, 305 USE_PROXY, 307 TEMPORARY_REDIRECT, 308 PERMANENT_REDIRECT, 400 BAD_REQUEST, 401 UNAUTHORIZED, 402 PAYMENT_REQUIRED, 403 FORBIDDEN, 404 NOT_FOUND, 405 METHOD_NOT_ALLOWED, 406 NOT_ACCEPTABLE, 407 PROXY_AUTHENTICATION_REQUIRED, 408 REQUEST_TIMEOUT, 409 CONFLICT, 410 GONE, 411 LENGTH_REQUIRED, 412 PRECONDITION_FAILED, 413 PAYLOAD_TOO_LARGE, 413 REQUEST_ENTITY_TOO_LARGE, 414 URI_TOO_LONG, 414 REQUEST_URI_TOO_LONG, 415 UNSUPPORTED_MEDIA_TYPE, 416 REQUESTED_RANGE_NOT_SATISFIABLE, 417 EXPECTATION_FAILED, 418 I_AM_A_TEAPOT, 419 INSUFFICIENT_SPACE_ON_RESOURCE, 420 METHOD_FAILURE, 421 DESTINATION_LOCKED, 422 UNPROCESSABLE_ENTITY, 423 LOCKED, 424 FAILED_DEPENDENCY, 425 TOO_EARLY, 426 UPGRADE_REQUIRED, 428 PRECONDITION_REQUIRED, 429 TOO_MANY_REQUESTS, 431 REQUEST_HEADER_FIELDS_TOO_LARGE, 451 UNAVAILABLE_FOR_LEGAL_REASONS, 500 INTERNAL_SERVER_ERROR, 501 NOT_IMPLEMENTED, 502 BAD_GATEWAY, 503 SERVICE_UNAVAILABLE, 504 GATEWAY_TIMEOUT, 505 HTTP_VERSION_NOT_SUPPORTED, 506 VARIANT_ALSO_NEGOTIATES, 507 INSUFFICIENT_STORAGE, 508 LOOP_DETECTED, 509 BANDWIDTH_LIMIT_EXCEEDED, 510 NOT_EXTENDED, 511 NETWORK_AUTHENTICATION_REQUIRED ]
           example: FORBIDDEN
           description: Код статуса HTTP-ответа
         timestamp:
