@@ -1,17 +1,17 @@
 package ru.practicum.user;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.user.dto.NewUserRequest;
-import ru.practicum.user.dto.UserDto;
+import ru.practicum.openapi.model.NewUserRequest;
+import ru.practicum.openapi.model.UserDto;
 import ru.practicum.user.dto.UserShortDto;
 
 @UtilityClass
 public class UserMapper {
     public UserDto toUserDto(User user) {
         return new UserDto(
+                user.getEmail(),
                 user.getId(),
-                user.getName(),
-                user.getEmail()
+                user.getName()
         );
     }
 

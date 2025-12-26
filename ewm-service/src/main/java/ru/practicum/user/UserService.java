@@ -3,13 +3,11 @@ package ru.practicum.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.user.dto.NewUserRequest;
-import ru.practicum.user.dto.UserDto;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import ru.practicum.openapi.model.GetUserRequest;
+import ru.practicum.openapi.model.NewUserRequest;
+import ru.practicum.openapi.model.UserDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,15 +18,8 @@ public class UserService {
         return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(newUserRequest)));
     }
 
-    public List<UserDto> getUsers(List<Long> userIds, Integer from, Integer size) {
-        Pageable pageable = PageRequest.of(from / size, size);
-        if (userIds == null) {
-            return userRepository.findAll(pageable).map(UserMapper::toUserDto).getContent();
-        } else {
-            return userRepository.findAllByIdIn(userIds, pageable).stream()
-                    .map(UserMapper::toUserDto)
-                    .collect(Collectors.toList());
-        }
+    public List<UserDto> getUsers(GetUserRequest getUserRequest) {
+
     }
 
     public void deleteUser(Long userId) {
