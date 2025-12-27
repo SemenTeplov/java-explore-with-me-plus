@@ -1078,8 +1078,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'components.yaml#/components/schemas/UserDto'
-                type: object
+                type: array
+                items:
+                  $ref: 'components.yaml#/components/schemas/UserDto'
+                  type: object
         400:
           description: Запрос составлен некорректно
           content:
