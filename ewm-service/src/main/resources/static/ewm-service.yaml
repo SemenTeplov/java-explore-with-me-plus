@@ -47,7 +47,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'components.yaml#/components/schemas/CompilationDto'
+                type: array
+                items:
+                  $ref: 'components.yaml#/components/schemas/CompilationDto'
         400:
           description: Запрос составлен некорректно
           content:
@@ -189,11 +191,11 @@ paths:
       description: Обратите внимание, имя категории должно быть уникальным.
       operationId: addCategory
       requestBody:
-        required: true
         content:
           application/json:
             schema:
               $ref: 'components.yaml#/components/schemas/NewCategoryDto'
+              type: object
       responses:
         201:
           description: Категория добавлена
@@ -393,7 +395,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'components.yaml#/components/schemas/EventShortDto'
+                type: array
+                items:
+                  $ref: 'components.yaml#/components/schemas/EventShortDto'
         400:
           description: Запрос составлен некорректно
           content:
@@ -487,7 +491,6 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-
     patch:
       tags:
         - Event
@@ -562,7 +565,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
+                type: array
+                items:
+                  $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
         400:
           description: Запрос составлен некорректно
           content:
@@ -682,7 +687,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'components.yaml#/components/schemas/EventFullDto'
+                type: array
+                items:
+                  $ref: 'components.yaml#/components/schemas/EventFullDto'
         400:
           description: Запрос составлен некорректно
           content:
@@ -807,7 +814,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'components.yaml#/components/schemas/EventShortDto'
+                type: array
+                items:
+                  $ref: 'components.yaml#/components/schemas/EventShortDto'
         400:
           description: Запрос составлен некорректно
           content:
@@ -873,7 +882,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
+                type: array
+                items:
+                  $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
         400:
           description: Запрос составлен некорректно
           content:
