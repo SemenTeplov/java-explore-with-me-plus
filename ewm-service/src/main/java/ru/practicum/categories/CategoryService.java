@@ -2,6 +2,7 @@ package main.java.ru.practicum.categories;
 
 import lombok.RequiredArgsConstructor;
 import main.java.ru.practicum.categories.dto.NewCategoryDto;
+import main.java.ru.practicum.constant.Messages;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.openapi.model.CategoryDto;
@@ -36,13 +37,13 @@ public class CategoryService {
 
     public void deleteCategory(Long categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
-            throw new NotFoundException(String.format("Категория с id=%d не найдена", categoryId));
+            throw new NotFoundException(String.format(Messages.MESSAGE_CATEGORY_NOT_FOUND, categoryId));
         }
         categoryRepository.deleteById(categoryId);
     }
 
     private Category getCategory(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(() ->
-                new NotFoundException(String.format("Категория с id=%d не найдена", categoryId)));
+                new NotFoundException(String.format(Messages.MESSAGE_CATEGORY_NOT_FOUND, categoryId)));
     }
 }

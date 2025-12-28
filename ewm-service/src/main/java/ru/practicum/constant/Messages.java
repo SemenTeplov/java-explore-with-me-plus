@@ -16,4 +16,5 @@ public class Messages {
     public static final String MESSAGE_NOT_READABLE = "Тело запроса не читаемо: {}";
     public static final String EXCEPTION_CONSTRAINT_VIOLATION = "Недопустимое значение.";
     public static final String MESSAGE_CONSTRAINT_VIOLATION = "Недопустимое значение: {}";
+    public static final String MESSAGE_CATEGORY_NOT_FOUND = "Категория с id=%d не найдена";
 }
