@@ -2,13 +2,12 @@ package main.java.ru.practicum.categories;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.ru.practicum.categories.dto.NewCategoryDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.openapi.api.CategoryApi;
 import ru.practicum.openapi.model.CategoryDto;
-import ru.practicum.openapi.model.UserDto;
+import ru.practicum.openapi.model.NewCategoryDto;
 
 import java.util.List;
 
@@ -18,10 +17,11 @@ import java.util.List;
 public class CategoryController implements CategoryApi {
     private final CategoryService categoryService;
 
+
     @Override
-    public ResponseEntity<CategoryDto> _addCategory(Object body) {
-        log.info("POST /admin/categories with request: {}", body);
-        CategoryDto categoryDto = categoryService.addCategory((NewCategoryDto) body);
+    public ResponseEntity<CategoryDto> _addCategory(NewCategoryDto newCategoryDto) {
+        log.info("POST /admin/categories with request: {}", newCategoryDto);
+        CategoryDto categoryDto = categoryService.addCategory(newCategoryDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryDto);
     }
 

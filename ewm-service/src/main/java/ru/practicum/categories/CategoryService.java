@@ -1,11 +1,11 @@
 package main.java.ru.practicum.categories;
 
 import lombok.RequiredArgsConstructor;
-import main.java.ru.practicum.categories.dto.NewCategoryDto;
 import main.java.ru.practicum.constant.Messages;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.openapi.model.CategoryDto;
+import ru.practicum.openapi.model.NewCategoryDto;
 import main.java.ru.practicum.exception.NotFoundException;
 
 import java.util.List;

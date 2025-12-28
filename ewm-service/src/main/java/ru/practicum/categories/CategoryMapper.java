@@ -1,7 +1,7 @@
 package main.java.ru.practicum.categories;
 
 import lombok.experimental.UtilityClass;
-import main.java.ru.practicum.categories.dto.NewCategoryDto;
+import ru.practicum.openapi.model.NewCategoryDto;
 import ru.practicum.openapi.model.CategoryDto;
 
 @UtilityClass
