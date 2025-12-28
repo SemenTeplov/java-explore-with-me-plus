@@ -203,12 +203,12 @@ components:
       required:
         - name
       properties:
-        type: string
-        required: true
-        maxLength: 50
-        minLength: 1
-        example: Концерты
-        description: Название категории
+        name:
+          type: string
+          maxLength: 50
+          minLength: 1
+          example: Концерты
+          description: Название категории
 
     NewEventDto:
       type: object

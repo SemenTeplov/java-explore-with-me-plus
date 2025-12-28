@@ -48,14 +48,12 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/CompilationDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /compilations/{compId}:
     get:
@@ -79,21 +77,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/CompilationDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         404:
           description: Подборка не найдена или недоступна
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /admin/compilations:
     post:
@@ -107,7 +102,6 @@ paths:
           application/json:
             schema:
               $ref: 'components.yaml#/components/schemas/NewCompilationDto'
-              type: object
       responses:
         201:
           description: Подборка добавлена
@@ -115,21 +109,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/CompilationDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         409:
           description: Нарушение целостности данных
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /admin/compilations/{compId}:
     delete:
@@ -155,7 +146,6 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
     patch:
       tags:
         - Compilation
@@ -175,7 +165,6 @@ paths:
           application/json:
             schema:
               $ref: 'components.yaml#/components/schemas/UpdateCompilationRequest'
-              type: object
       responses:
         200:
           description: Подборка обновлена
@@ -183,14 +172,12 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/CompilationDto'
-                type: object
         404:
           description: Подборка не найдена или недоступна
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
 #-----Category-----
 
@@ -202,11 +189,11 @@ paths:
       description: Обратите внимание, имя категории должно быть уникальным.
       operationId: addCategory
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: 'components.yaml#/components/schemas/NewCategoryDto'
-              type: object
       responses:
         201:
           description: Категория добавлена
@@ -214,21 +201,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/CategoryDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         409:
           description: Нарушение целостности данных
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /admin/categories/{catId}:
     delete:
@@ -254,14 +238,12 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         409:
           description: Нарушение целостности данных
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
     patch:
       tags:
         - Category
@@ -281,7 +263,6 @@ paths:
           application/json:
             schema:
               $ref: 'components.yaml#/components/schemas/CategoryDto'
-              type: object
       responses:
         200:
           description: Данные категории изменены
@@ -289,21 +270,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/CategoryDto'
-                type: object
         404:
           description: Категория не найдена или недоступна
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         409:
           description: Нарушение целостности данных
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /categories:
     get:
@@ -333,15 +311,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: 'components.yaml#/components/schemas/CategoryDto'
-                type: object
+                type: array
+                items:
+                  $ref: 'components.yaml#/components/schemas/CategoryDto'
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /categories/{catId}:
     get:
@@ -365,21 +343,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/CategoryDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         404:
           description: Категория не найдена или недоступна
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
 #-----Event-----
 
@@ -419,14 +394,12 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/EventShortDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
     post:
       tags:
@@ -447,7 +420,6 @@ paths:
           application/json:
             schema:
               $ref: 'components.yaml#/components/schemas/NewEventDto'
-              type: object
       responses:
         201:
           description: Событие добавлено
@@ -455,22 +427,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/EventFullDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         409:
           description: Событие не удовлетворяет правилам создания
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
-
 
   /users/{userId}/events/{eventId}:
     get:
@@ -501,28 +469,24 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/EventFullDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         404:
           description: Событие не найдено или недоступно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         409:
           description: Событие не удовлетворяет правилам создания
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
     patch:
       tags:
@@ -550,7 +514,6 @@ paths:
           application/json:
             schema:
               $ref: 'components.yaml#/components/schemas/UpdateEventUserRequest'
-              type: object
       responses:
         200:
           description: Событие обновлено
@@ -558,22 +521,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/EventFullDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         404:
           description: Событие не найдено или недоступно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
-
 
   /users/{userId}/events/{eventId}/requests:
     get:
@@ -604,14 +563,12 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
     patch:
       tags:
         - Event
@@ -638,7 +595,6 @@ paths:
           application/json:
             schema:
               $ref: 'components.yaml#/components/schemas/EventRequestStatusRequest'
-              type: object
       responses:
         200:
           description: Статус заявок изменён
@@ -646,28 +602,24 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/EventRequestStatusUpdateResult'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         404:
           description: Событие не найдено или недоступно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         409:
           description: Событие не удовлетворяет правилам создания
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /admin/events:
     get:
@@ -731,14 +683,12 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/EventFullDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /admin/events/{eventId}:
     patch:
@@ -760,7 +710,6 @@ paths:
           application/json:
             schema:
               $ref: 'components.yaml#/components/schemas/UpdateEventAdminRequest'
-              type: object
       responses:
         200:
           description: Событие отредактировано
@@ -768,21 +717,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/EventFullDto'
-                type: object
         404:
           description: Событие не найдено или недоступно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         409:
           description: Событие не удовлетворяет правилам создания
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /events:
     get:
@@ -862,14 +808,12 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/EventShortDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /events{id}:
     get:
@@ -893,21 +837,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/EventFullDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         404:
           description: Событие не найдено или недоступно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
 #-----Request-----
 
@@ -933,21 +874,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         404:
           description: Пользователь не найден
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
     post:
       tags:
         - Request
@@ -976,28 +914,24 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         404:
           description: Событие не найдено или недоступно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         409:
           description: Нарушение целостности данных
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /users/{userId}/requests/{requestId}/cancel:
     get:
@@ -1028,14 +962,12 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
-                type: object
         404:
           description: Запрос не найден или недоступен
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
 #-----User-----
 
@@ -1081,14 +1013,12 @@ paths:
                 type: array
                 items:
                   $ref: 'components.yaml#/components/schemas/UserDto'
-                  type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
     post:
       tags:
         - User
@@ -1100,7 +1030,6 @@ paths:
           application/json:
             schema:
               $ref: 'components.yaml#/components/schemas/NewUserRequest'
-              type: object
       responses:
         201:
           description: Пользователь зарегистрирован
@@ -1108,21 +1037,18 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/UserDto'
-                type: object
         400:
           description: Запрос составлен некорректно
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
         409:
           description: Нарушение целостности данных
           content:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
 
   /admin/users/{userId}:
     delete:
@@ -1148,4 +1074,3 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
-                type: object
