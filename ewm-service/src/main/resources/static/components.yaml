@@ -15,27 +15,20 @@ components:
         events:
           type: array
           items:
-            content:
-              application/json:
-                schema:
-                  $ref: 'components.yaml#/components/schemas/EventShortDto'
-                  type: object
-      id:
-        type: integer
-        format: int64
-        required: true
-        example: 1
-        description: Идентификатор
-      pinned:
-        type: boolean
-        required: true
-        example: true
-        description: Закреплена ли подборка на главной странице сайта
-      title:
-        type: string
-        required: true
-        example: Летние концерты
-        description: Заголовок подборки
+            $ref: 'components.yaml#/components/schemas/EventShortDto'
+        id:
+          type: integer
+          format: int64
+          example: 1
+          description: Идентификатор
+        pinned:
+          type: boolean
+          example: true
+          description: Закреплена ли подборка на главной странице сайта
+        title:
+          type: string
+          example: Летние концерты
+          description: Заголовок подборки
 
     EventShortDto:
       type: object
@@ -53,16 +46,10 @@ components:
       properties:
         annotation:
           type: string
-          required: true
           example: Эксклюзивность нашего шоу гарантирует привлечение максимальной зрительской аудитории
           description: Краткое описание
         category:
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/components/schemas/CategoryDto'
-                type: object
-                required: true
+          $ref: 'components.yaml#/components/schemas/CategoryDto'
         confirmedRequests:
           type: integer
           format: int64
@@ -70,7 +57,7 @@ components:
           description: Количество одобренных заявок на участие в данном событии
         eventDate:
           type: string
-          required: true
+          format: date-time
           example: 2024-12-31 15:10:05
           description: Дата и время на которые намечено событие (в формате "yyyy-MM-dd HH:mm:ss")
         id:
@@ -79,19 +66,13 @@ components:
           example: 1
           description: Идентификатор
         initiator:
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/components/schemas/UserShortDto'
-                type: object
+          $ref: 'components.yaml#/components/schemas/UserShortDto'
         paid:
           type: boolean
-          required: true
           example: true
           description: Нужно ли оплачивать участие
         title:
           type: string
-          required: true
           example: Знаменитое шоу 'Летающая кукуруза'
           description: Заголовок
         views:
@@ -115,7 +96,6 @@ components:
           description: Идентификатор категории
         name:
           type: string
-          required: true
           maxLength: 50
           minLength: 1
           example: Концерты
@@ -131,12 +111,10 @@ components:
         id:
           type: integer
           format: int64
-          required: true
           example: 1
           description: Идентификатор
         name:
           type: string
-          required: true
           example: Фёдоров Матвей
           description: Имя
 
@@ -163,7 +141,6 @@ components:
           description: Закреплена ли подборка на главной странице сайта
         title:
           type: string
-          required: true
           maxLength: 50
           minLength: 1
           example: Летние концерты
@@ -203,12 +180,12 @@ components:
       required:
         - name
       properties:
-        type: string
-        required: true
-        maxLength: 50
-        minLength: 1
-        example: Концерты
-        description: Название категории
+        name:
+          type: string
+          maxLength: 50
+          minLength: 1
+          example: Концерты
+          description: Название категории
 
     NewEventDto:
       type: object
@@ -226,7 +203,6 @@ components:
       properties:
         annotation:
           type: string
-          required: true
           maxLength: 2000
           minLength: 20
           example: Сплав на байдарках похож на полет.
@@ -234,28 +210,21 @@ components:
         category:
           type: integer
           format: int64
-          required: true
           example: 2
           description: id категории к которой относится событие
         description:
           type: string
-          required: true
           maxLength: 7000
           minLength: 20
           example: Сплав на байдарках похож на полет. На спокойной воде — это парение. На бурной, порожистой — выполнение фигур высшего пилотажа. И то, и другое дарят чувство обновления, феерические эмоции, яркие впечатления.
           description: Полное описание события
         eventDate:
           type: string
-          required: true
+          format: date-time
           example: 2024-12-31 15:10:05
           description: Дата и время на которые намечено событие. Дата и время указываются в формате "yyyy-MM-dd HH:mm:ss"
         location:
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/components/schemas/Location'
-                type: object
-                required: true
+          $ref: 'components.yaml#/components/schemas/Location'
         paid:
           type: boolean
           example: true
@@ -321,15 +290,10 @@ components:
       properties:
         annotation:
           type: string
-          required: true
           example: Эксклюзивность нашего шоу гарантирует привлечение максимальной зрительской аудитории
           description: Краткое описание
         category:
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/components/schemas/CategoryDto'
-                type: object
+          $ref: 'components.yaml#/components/schemas/CategoryDto'
         confirmedRequests:
           type: integer
           format: int64
@@ -345,7 +309,7 @@ components:
           description: Полное описание события
         eventDate:
           type: string
-          required: true
+          format: date-time
           example: 2024-12-31 15:10:05
           description: Дата и время на которые намечено событие (в формате "yyyy-MM-dd HH:mm:ss")
         id:
@@ -354,22 +318,11 @@ components:
           example: 1
           description: Идентификатор
         initiator:
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/components/schemas/UserShortDto'
-                type: object
-                required: true
+          $ref: 'components.yaml#/components/schemas/UserShortDto'
         location:
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/components/schemas/Location'
-                type: object
-                required: true
+          $ref: 'components.yaml#/components/schemas/Location'
         paid:
           type: boolean
-          required: true
           example: true
           description: Нужно ли оплачивать участие
         participantLimit:
@@ -380,6 +333,7 @@ components:
           description: Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
         publishedOn:
           type: string
+          format: date-time
           example: 2022-09-06 15:10:05
           description: Дата и время публикации события (в формате "yyyy-MM-dd HH:mm:ss")
         requestModeration:
@@ -394,7 +348,6 @@ components:
           description: Список состояний жизненного цикла события
         title:
           type: string
-          required: true
           example: Знаменитое шоу 'Летающая кукуруза'
           description: Заголовок
         views:
@@ -437,14 +390,11 @@ components:
           description: Новое описание
         eventDate:
           type: string
+          format: date-time
           example: 2023-10-11 23:10:05
           description: Новые дата и время на которые намечено событие. Дата и время указываются в формате "yyyy-MM-dd HH:mm:ss"
         location:
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/components/schemas/Location'
-                type: object
+          $ref: 'components.yaml#/components/schemas/Location'
         paid:
           type: boolean
           example: true
@@ -482,6 +432,7 @@ components:
       properties:
         created:
           type: string
+          format: date-time
           example: 2022-09-06T21:10:05.432
           description: Дата и время создания заявки
         event:
@@ -531,17 +482,9 @@ components:
         - rejectedRequests
       properties:
         confirmedRequests:
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
-                type: object
+          $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
         rejectedRequests:
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
-                type: object
+          $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
 
     UpdateEventAdminRequest:
       type: object
@@ -577,14 +520,11 @@ components:
           description: Новое описание
         eventDate:
           type: string
+          format: date-time
           example: 2023-10-11 23:10:05
           description: Новые дата и время на которые намечено событие. Дата и время указываются в формате "yyyy-MM-dd HH:mm:ss"
         location:
-          content:
-            application/json:
-              schema:
-                $ref: 'components.yaml#/components/schemas/Location'
-                type: object
+          $ref: 'components.yaml#/components/schemas/Location'
         paid:
           type: boolean
           example: true
@@ -620,7 +560,6 @@ components:
       properties:
         email:
           type: string
-          required: true
           example: petrov.i@practicummail.ru
           description: Почтовый адрес
         id:
@@ -631,7 +570,6 @@ components:
           description: Идентификатор
         name:
           type: string
-          required: true
           example: Петров Иван
           description: Имя
 
@@ -644,14 +582,12 @@ components:
       properties:
         email:
           type: string
-          required: true
           maxLength: 254
           minLength: 6
           example: ivan.petrov@practicummail.ru
           description: Почтовый адрес
         name:
           type: string
-          required: true
           maxLength: 250
           minLength: 2
           example: Иван Петров
@@ -690,7 +626,3 @@ components:
           type: string
           example: 2022-06-09 06:27:23
           description: Дата и время когда произошла ошибка (в формате "yyyy-MM-dd HH:mm:ss")
-
-
-
-
