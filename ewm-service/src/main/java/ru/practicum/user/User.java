@@ -1,6 +1,9 @@
 package main.java.ru.practicum.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,9 +20,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @NotBlank
+    @Size(max=254)
     @Column(nullable = false)
     String name;
 
+    @NotBlank
+    @Email
+    @Size(max=254)
     @Column(unique = true, nullable = false)
     String email;
 
