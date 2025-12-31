@@ -1,19 +1,15 @@
-package ru.practicum.constant;
+package main.java.ru.practicum.constant;
+
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 public class Messages {
-    public static final String INFORMATION_ADDED = "Информация сохранена";
-    public static final String POST_HIT_REQUEST = "POST /hit: app={}, uri={}, ip={}";
-    public static final String GET_STATS_REQUEST = "GET /stats: start={}, end={}, uris={}, unique={}";
-    public static final String SAVE_HIT_EXCEPTION = "Ошибка при сохранении hit";
-    public static final String DATE_EXCEPTION = "Дата От может быть только после даты До";
-    public static final String EXCEPTION_INTERNAL_SERVER = "Внутренняя ошибка сервера. Подождите несколько минут и попробуйте снова.";
-    public static final String MESSAGE_INTERNAL_SERVER = "Внутренняя ошибка сервера: {} ";
-    public static final String EXCEPTION_UNPROCESSABLE_ENTITY = "Недопустимый аргумент.";
-    public static final String MESSAGE_UNPROCESSABLE_ENTITY = "Некорректный аргумент: {}";
-    public static final String EXCEPTION_NOT_VALID = "Валидация не пройдена. Недопустимое значение.";
-    public static final String MESSAGE_NOT_VALID = "Значение не прошло валидацию: {}";
-    public static final String EXCEPTION_NOT_READABLE = "Тело запроса не читаемо.";
-    public static final String MESSAGE_NOT_READABLE = "Тело запроса не читаемо: {}";
-    public static final String EXCEPTION_CONSTRAINT_VIOLATION = "Недопустимое значение.";
-    public static final String MESSAGE_CONSTRAINT_VIOLATION = "Недопустимое значение: {}";
+    public static final String GET_COMPILATIONS = "Пришел запрос на получение подборки событий";
+    public static final String GET_COMPILATION = "Пришел запрос на получение подборки события по id {}";
+    public static final String NOT_FOUND_COMPLETION = "Подборка событий по id не найдено";
+    public static final String METHOD_ARGUMENT_TYPE_MISMATCH_EXCEPTION = "Ошибка валидации";
+    public static final String EXCEPTION = "Внутренняя ошибка сервера";
+    public static final String SAVE_COMPILATION = "Пришел запрос на сохранение подборки события {}";
+    public static final String CONSTRAINT_VIOLATION_EXCEPTION = "Не удалось выполнить SQL запрос";
+    public static final String DELETE_COMPILATION = "Пришел запрос на удаление подборки события {}";
+    public static final String UPDATE_COMPILATION = "Пришел запрос на обновление подборки события {}";
 }

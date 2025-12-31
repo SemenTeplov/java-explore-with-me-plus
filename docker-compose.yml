@@ -42,6 +42,6 @@ services:
     ports:
       - "5433:5433"
     environment:
-      - POSTGRES_PASSWORD=emv
-      - POSTGRES_USER=emv
-      - POSTGRES_DB=emv
+      - POSTGRES_PASSWORD=ewm
+      - POSTGRES_USER=ewm
+      - POSTGRES_DB=ewm

@@ -606,7 +606,7 @@ components:
         errors:
           type: array
           items:
-            type: integer
+            type: string
             example: "[]"
           description: Список стектрейсов или описания ошибок
         message:
