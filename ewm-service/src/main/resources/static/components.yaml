@@ -1,7 +1,7 @@
 components:
   schemas:
 
-#-----Responses-----
+    #-----Responses-----
 
     CompilationDto:
       type: object
@@ -593,7 +593,7 @@ components:
           example: Иван Петров
           description: Имя
 
-#-----Error-----
+    #-----Error-----
 
     ApiError:
       required:
@@ -606,7 +606,7 @@ components:
         errors:
           type: array
           items:
-            type: integer
+            type: string
             example: "[]"
           description: Список стектрейсов или описания ошибок
         message:

@@ -12,7 +12,7 @@ servers:
 
 paths:
 
-#-----Compilation-----
+  #-----Compilation-----
 
   /compilations:
     get:
@@ -181,7 +181,7 @@ paths:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
 
-#-----Category-----
+  #-----Category-----
 
   /admin/categories:
     post:
@@ -358,7 +358,7 @@ paths:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
 
-#-----Event-----
+  #-----Event-----
 
   /users/{userId}/events:
     get:
@@ -859,7 +859,7 @@ paths:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
 
-#-----Request-----
+  #-----Request-----
 
   /users/{userId}/requests:
     get:
@@ -980,7 +980,7 @@ paths:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
 
-#-----User-----
+  #-----User-----
 
   /admin/users:
     get:

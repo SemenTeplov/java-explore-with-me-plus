@@ -2,65 +2,51 @@ package main.java.ru.practicum.exception;
 
 import lombok.extern.slf4j.Slf4j;
 
+import main.java.ru.practicum.constant.Exceptions;
 import main.java.ru.practicum.constant.Messages;
-import main.java.ru.practicum.constant.Values;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 import ru.practicum.openapi.model.ApiError;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Collections;
+
+import java.util.Arrays;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError handleNotFoundException(final NotFoundException e) {
-        log.info("404 {}", e.getMessage(), e);
-        return createApiError(
-                ApiError.StatusEnum._404_NOT_FOUND,
-                Messages.MESSAGE_NOT_FOUND,
-                e.getMessage(),
-                getStackTrace(e)
-        );
+    public ResponseEntity<ApiError> handleNotFoundException(NotFoundException e) {
+        log.info(Messages.MESSAGE_NOT_FOUND, e.getMessage());
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_NOT_FOUND)
+                .message(Exceptions.EXCEPTION_NOT_FOUND)
+                .status(ApiError.StatusEnum._404_NOT_FOUND)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError handleException(final Exception e) {
-        log.info("500 {}", e.getMessage(), e);
-        return createApiError(
-                ApiError.StatusEnum._500_INTERNAL_SERVER_ERROR,
-                Messages.EXCEPTION_INTERNAL_SERVER,
-                e.getMessage(),
-                getStackTrace(e)
-        );
-    }
+    public ResponseEntity<ApiError> handleException(Exception e) {
+        log.info(Messages.MESSAGE_INTERNAL_SERVER, e.getMessage(), e);
 
-    private ApiError createApiError(ApiError.StatusEnum status,
-                                    String reason,
-                                    String message,
-                                    String stackTrace) {
-        return new ApiError()
-                .errors(Collections.emptyList())
-                .message(message)
-                .reason(reason)
-                .status(status)
-                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern(Values.DATE_TIME_PATTERN)));
-    }
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_INTERNAL_SERVER)
+                .message(Exceptions.EXCEPTION_INTERNAL_SERVER)
+                .status(ApiError.StatusEnum._500_INTERNAL_SERVER_ERROR)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
 
-    private String getStackTrace(Exception e) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        return sw.toString();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
