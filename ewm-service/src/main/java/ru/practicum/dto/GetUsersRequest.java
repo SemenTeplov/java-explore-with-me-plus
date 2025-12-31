@@ -1,4 +1,4 @@
-package main.java.ru.practicum.user.dto;
+package main.java.ru.practicum.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,8 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GetUsersRequest {
     List<Long> ids;
+
     int from;
+
     int size;
 }

@@ -1,11 +1,16 @@
-package main.java.ru.practicum.user;
+package main.java.ru.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import main.java.ru.practicum.user.dto.GetUsersRequest;
+
+import main.java.ru.practicum.constant.Messages;
+import main.java.ru.practicum.dto.GetUsersRequest;
+import main.java.ru.practicum.service.UserService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+
 import ru.practicum.openapi.model.NewUserRequest;
 import ru.practicum.openapi.model.UserDto;
 import ru.practicum.openapi.api.UserApi;
@@ -20,8 +25,9 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<Void> _deleteUser(Long userId) {
-        log.info("DELETE /admin.users/{}", userId);
+        log.info(Messages.MESSAGE_DELETE_USER, userId);
         userService.deleteUser(userId);
+
         return ResponseEntity.noContent().build();
     }
 
@@ -31,17 +37,19 @@ public class UserController implements UserApi {
             Integer from,
             Integer size) {
 
-        log.info("GET /admin/users?ids={}&from={}&size={}", ids, from, size);
+        log.info(Messages.MESSAGE_GET_USERS, ids, from, size);
 
         GetUsersRequest request = new GetUsersRequest(ids, from, size);
         List<UserDto> users = userService.getUsers(request);
+
         return ResponseEntity.ok(users);
     }
 
     @Override
     public ResponseEntity<UserDto> _registerUser(NewUserRequest newUserRequest) {
-        log.info("POST /admin/users with request: {}", newUserRequest);
+        log.info(Messages.MESSAGE_REGISTER_USER, newUserRequest);
         UserDto userDto = userService.addUser(newUserRequest);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 }

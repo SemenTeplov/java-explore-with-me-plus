@@ -18,4 +18,7 @@ public class Messages {
     public static final String MESSAGE_GET_CATEGORIES = "GET /categories";
     public static final String MESSAGE_GET_CATEGORY = "GET /categories/{}";
     public static final String MESSAGE_UPDATE_CATEGORY = "PATCH /admin/categories/{} with request: {}";
+    public static final String MESSAGE_DELETE_USER = "DELETE /admin.users/{}";
+    public static final String MESSAGE_GET_USERS = "GET /admin/users?ids={}&from={}&size={}";
+    public static final String MESSAGE_REGISTER_USER = "POST /admin/users with request: {}";
 }
