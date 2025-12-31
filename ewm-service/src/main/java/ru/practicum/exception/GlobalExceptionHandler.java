@@ -9,6 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import main.java.ru.practicum.constant.Messages;
+import main.java.ru.practicum.dto.ExceptionDto;
+
+import java.time.LocalDateTime;
 
 import ru.practicum.openapi.model.ApiError;
 
