@@ -8,4 +8,5 @@ public class Exceptions {
     public static final String EXCEPTION_CONSTRAINT_VIOLATION = "Недопустимое значение.";
     public static final String EXCEPTION_NOT_FOUND = "Объект не найден, 404";
     public static final String EXCEPTION_NOT_FOUND_USER = "Пользователь с id=%d не найден";
+    public static final String EXCEPTION_DATE_MISMATCH = "Дата не соответствует требованиям 409";
 }
