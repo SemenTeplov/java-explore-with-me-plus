@@ -33,7 +33,7 @@ public class EventController implements EventApi {
     public ResponseEntity<EventRequestStatusUpdateResult> _changeRequestStatus(Long userId,
                                                                                Long eventId,
                                                                                EventRequestStatusRequest eventRequestStatusRequest) {
-        return null;
+        return eventService.changeRequestStatus(userId, eventId, eventRequestStatusRequest);
     }
 
     @Override

@@ -482,9 +482,13 @@ components:
         - rejectedRequests
       properties:
         confirmedRequests:
-          $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
+          type: array
+          items:
+            $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
         rejectedRequests:
-          $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
+          type: array
+          items:
+            $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
 
     UpdateEventAdminRequest:
       type: object

@@ -9,4 +9,6 @@ public class Exceptions {
     public static final String EXCEPTION_NOT_FOUND = "Объект не найден, 404";
     public static final String EXCEPTION_NOT_FOUND_USER = "Пользователь с id=%d не найден";
     public static final String EXCEPTION_DATE_MISMATCH = "Дата не соответствует требованиям 409";
+    public static final String EXCEPTION_LIMIT_EXCEEDED = "Лимит запросов превышен, код ошибки 409";
+    public static final String EXCEPTION_NOT_RESPOND_STATUS = "Статус запросов должен быть PENDING код ошибки 409";
 }

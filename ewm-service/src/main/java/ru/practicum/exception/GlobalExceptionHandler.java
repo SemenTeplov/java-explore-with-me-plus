@@ -82,6 +82,36 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
+    @ExceptionHandler(LimitRequestsExceededException.class)
+    public ResponseEntity<ApiError> handleLimitRequestsExceededException(LimitRequestsExceededException e) {
+        log.info(Messages.MESSAGE_LIMIT_EXCEEDED, e.getMessage());
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_LIMIT_EXCEEDED)
+                .message(Exceptions.EXCEPTION_LIMIT_EXCEEDED)
+                .status(ApiError.StatusEnum._409_CONFLICT)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(NotRespondStatusException.class)
+    public ResponseEntity<ApiError> handleNotRespondStatusException(NotRespondStatusException e) {
+        log.info(Messages.MESSAGE_NOT_RESPOND_STATUS, e.getMessage());
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_NOT_RESPOND_STATUS)
+                .message(Exceptions.EXCEPTION_NOT_RESPOND_STATUS)
+                .status(ApiError.StatusEnum._409_CONFLICT)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleException(Exception e) {
         log.info(Messages.MESSAGE_INTERNAL_SERVER, e.getMessage(), e);
