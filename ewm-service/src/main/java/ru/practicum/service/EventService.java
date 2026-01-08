@@ -1,5 +1,8 @@
 package main.java.ru.practicum.service;
 
+import main.java.ru.practicum.dto.GetEventsForAdminRequest;
+import main.java.ru.practicum.dto.GetEventsRequest;
+
 import org.springframework.http.ResponseEntity;
 
 import ru.practicum.openapi.model.EventFullDto;
@@ -26,23 +29,9 @@ public interface EventService {
 
     ResponseEntity<EventFullDto> getEventUser(Long userId, Long eventId);
 
-    ResponseEntity<List<EventShortDto>> getEvents(String text,
-                                                   List<Long> categories,
-                                                   Boolean paid,
-                                                   String rangeStart,
-                                                   String rangeEnd,
-                                                   Boolean onlyAvailable,
-                                                   String sort,
-                                                   Integer from,
-                                                   Integer size);
+    ResponseEntity<List<EventShortDto>> getEvents(GetEventsRequest request);
 
-    ResponseEntity<List<EventFullDto>> getEventsAdmin(List<Long> users,
-                                                      List<String> states,
-                                                      List<Long> categories,
-                                                      String rangeStart,
-                                                      String rangeEnd,
-                                                      Integer from,
-                                                      Integer size);
+    ResponseEntity<List<EventFullDto>> getEventsAdmin(GetEventsForAdminRequest request);
 
     ResponseEntity<List<EventShortDto>> getEventsUser(Long userId, Integer from, Integer size);
 

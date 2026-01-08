@@ -2,7 +2,9 @@ package main.java.ru.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 
+import main.java.ru.practicum.dto.GetEventsRequest;
 import main.java.ru.practicum.service.EventService;
+import main.java.ru.practicum.dto.GetEventsForAdminRequest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,20 +32,19 @@ public class EventController implements EventApi {
     }
 
     @Override
-    public ResponseEntity<EventRequestStatusUpdateResult> _changeRequestStatus(Long userId,
-                                                                               Long eventId,
+    public ResponseEntity<EventRequestStatusUpdateResult> _changeRequestStatus(Long userId, Long eventId,
                                                                                EventRequestStatusRequest eventRequestStatusRequest) {
         return eventService.changeRequestStatus(userId, eventId, eventRequestStatusRequest);
     }
 
     @Override
     public ResponseEntity<EventFullDto> _getEvent(Long id) {
-        return null;
+        return eventService.getEvent(id);
     }
 
     @Override
     public ResponseEntity<List<ParticipationRequestDto>> _getEventParticipants(Long userId, Long eventId) {
-        return null;
+        return eventService.getEventParticipants(userId, eventId);
     }
 
     @Override
@@ -52,41 +53,51 @@ public class EventController implements EventApi {
     }
 
     @Override
-    public ResponseEntity<List<EventShortDto>> _getEvents(String text,
-                                                          List<Long> categories,
-                                                          Boolean paid,
-                                                          String rangeStart,
-                                                          String rangeEnd,
-                                                          Boolean onlyAvailable,
-                                                          String sort,
-                                                          Integer from,
-                                                          Integer size) {
-        return null;
+    public ResponseEntity<List<EventShortDto>> _getEvents(String text, List<Long> categories, Boolean paid,
+                                                          String rangeStart, String rangeEnd, Boolean onlyAvailable,
+                                                          String sort, Integer from, Integer size) {
+        return eventService.getEvents(GetEventsRequest.builder()
+                            .text(text)
+                            .categories(categories)
+                            .paid(paid)
+                            .rangeStart(rangeStart)
+                            .rangeEnd(rangeEnd)
+                            .onlyAvailable(onlyAvailable)
+                            .sort(sort)
+                            .from(from)
+                            .size(size)
+                            .build());
     }
 
     @Override
-    public ResponseEntity<List<EventFullDto>> _getEventsAdmin(List<Long> users,
-                                                              List<String> states,
-                                                              List<Long> categories,
-                                                              String rangeStart,
-                                                              String rangeEnd,
-                                                              Integer from,
+    public ResponseEntity<List<EventFullDto>> _getEventsAdmin(List<Long> users, List<String> states, List<Long> categories,
+                                                              String rangeStart, String rangeEnd, Integer from,
                                                               Integer size) {
-        return null;
+        return eventService.getEventsAdmin(GetEventsForAdminRequest.builder()
+                        .users(users)
+                        .states(states)
+                        .categories(categories)
+                        .rangeStart(rangeStart)
+                        .rangeEnd(rangeEnd)
+                        .from(from)
+                        .size(size)
+                        .build());
     }
 
     @Override
     public ResponseEntity<List<EventShortDto>> _getEventsUser(Long userId, Integer from, Integer size) {
-        return null;
+        return eventService.getEventsUser(userId, from, size);
     }
 
     @Override
-    public ResponseEntity<EventFullDto> _updateEvent(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
-        return null;
+    public ResponseEntity<EventFullDto> _updateEvent(Long userId, Long eventId,
+                                                     UpdateEventUserRequest updateEventUserRequest) {
+        return eventService.updateEvent(userId, eventId, updateEventUserRequest);
     }
 
     @Override
-    public ResponseEntity<EventFullDto> _updateEventAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
-        return null;
+    public ResponseEntity<EventFullDto> _updateEventAdmin(Long eventId,
+                                                          UpdateEventAdminRequest updateEventAdminRequest) {
+        return eventService.updateEventAdmin(eventId, updateEventAdminRequest);
     }
 }

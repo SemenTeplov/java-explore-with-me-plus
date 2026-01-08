@@ -49,5 +49,7 @@ public class Event {
 
     String title;
 
+    String state;
+
     Long views;
 }

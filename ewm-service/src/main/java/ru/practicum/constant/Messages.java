@@ -31,4 +31,8 @@ public class Messages {
             "Поступил запрос на получение информации о запросах от пользователя: {} для события: {}";
     public static final String MESSAGE_GET_EVENTS_BY_USER_ID_AND_EVENT_ID =
             "Поступил запрос на получение информации о событиии: {} от пользователя: {}";
+    public static final String MESSAGE_GET_EVENTS = "Поступил запрос на получение события";
+    public static final String MESSAGE_GET_EVENTS_FOR_ADMIN = "Поступил запрос на получение события администратором";
+    public static final String MESSAGE_GET_EVENTS_FOR_USER = "Поступил запрос на получение события пользователем";
+    public static final String MESSAGE_UPDATE_EVENT = "Поступил запрос на обновление события";
 }
