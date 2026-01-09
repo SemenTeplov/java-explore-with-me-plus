@@ -20,12 +20,14 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "categories")
+@Table(name = "compilations")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Category {
+public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String name;
+    Boolean pinned;
+
+    String title;
 }

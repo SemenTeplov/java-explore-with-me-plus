@@ -20,12 +20,14 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "categories")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Category {
+@Table(name = "locations")
+public class LocationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String name;
+    Float lat;
+
+    Float lon;
 }

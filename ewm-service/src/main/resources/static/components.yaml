@@ -58,6 +58,7 @@ components:
         eventDate:
           type: string
           format: date-time
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
           example: 2024-12-31 15:10:05
           description: Дата и время на которые намечено событие (в формате "yyyy-MM-dd HH:mm:ss")
         id:
@@ -149,10 +150,6 @@ components:
     UpdateCompilationRequest:
       type: object
       description: Подборка событий
-      required:
-        - events
-        - pinned
-        - title
       properties:
         events:
           type: array
@@ -220,7 +217,7 @@ components:
           description: Полное описание события
         eventDate:
           type: string
-          format: date-time
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
           example: 2024-12-31 15:10:05
           description: Дата и время на которые намечено событие. Дата и время указываются в формате "yyyy-MM-dd HH:mm:ss"
         location:
@@ -301,6 +298,7 @@ components:
           description: Количество одобренных заявок на участие в данном событии
         createdOn:
           type: string
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
           example: 2022-09-06 11:00:23
           description: Дата и время создания события (в формате "yyyy-MM-dd HH:mm:ss")
         description:
@@ -309,7 +307,7 @@ components:
           description: Полное описание события
         eventDate:
           type: string
-          format: date-time
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
           example: 2024-12-31 15:10:05
           description: Дата и время на которые намечено событие (в формате "yyyy-MM-dd HH:mm:ss")
         id:
@@ -333,7 +331,7 @@ components:
           description: Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
         publishedOn:
           type: string
-          format: date-time
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
           example: 2022-09-06 15:10:05
           description: Дата и время публикации события (в формате "yyyy-MM-dd HH:mm:ss")
         requestModeration:
@@ -359,17 +357,6 @@ components:
     UpdateEventUserRequest:
       type: object
       description: Данные для изменения информации о событии. Если поле в запросе не указано (равно null) - значит изменение этих данных не треубется.
-      required:
-        - annotation
-        - category
-        - description
-        - eventDate
-        - location
-        - paid
-        - participantLimit
-        - requestModeration
-        - stateAction
-        - title
       properties:
         annotation:
           type: string
@@ -390,7 +377,7 @@ components:
           description: Новое описание
         eventDate:
           type: string
-          format: date-time
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
           example: 2023-10-11 23:10:05
           description: Новые дата и время на которые намечено событие. Дата и время указываются в формате "yyyy-MM-dd HH:mm:ss"
         location:
@@ -482,24 +469,17 @@ components:
         - rejectedRequests
       properties:
         confirmedRequests:
-          $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
+          type: array
+          items:
+            $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
         rejectedRequests:
-          $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
+          type: array
+          items:
+            $ref: 'components.yaml#/components/schemas/ParticipationRequestDto'
 
     UpdateEventAdminRequest:
       type: object
       description: Данные для изменения информации о событии. Если поле в запросе не указано (равно null) - значит изменение этих данных не треубется.
-      required:
-        - annotation
-        - category
-        - description
-        - eventDate
-        - location
-        - paid
-        - participantLimit
-        - requestModeration
-        - stateAction
-        - title
       properties:
         annotation:
           type: string
@@ -520,7 +500,7 @@ components:
           description: Новое описание
         eventDate:
           type: string
-          format: date-time
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$'
           example: 2023-10-11 23:10:05
           description: Новые дата и время на которые намечено событие. Дата и время указываются в формате "yyyy-MM-dd HH:mm:ss"
         location:

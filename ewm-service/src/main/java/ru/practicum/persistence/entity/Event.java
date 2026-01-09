@@ -14,18 +14,44 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.time.OffsetDateTime;
+
 @Entity
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "categories")
+@Table(name = "events")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Category {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String name;
+    String annotation;
+
+    Integer confirmedRequests;
+
+    Long category;
+
+    String description;
+
+    OffsetDateTime eventDate;
+
+    Long location;
+
+    Long initiator;
+
+    Boolean paid;
+
+    Integer participantLimit;
+
+    Boolean requestModeration;
+
+    String title;
+
+    String state;
+
+    Long views;
 }

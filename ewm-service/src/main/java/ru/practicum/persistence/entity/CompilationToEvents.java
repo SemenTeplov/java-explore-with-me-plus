@@ -15,17 +15,19 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 @Entity
+@Table(name = "compilation_to_events")
 @Getter
 @Setter
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "categories")
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class Category {
+public class CompilationToEvents {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String name;
+    Long compilationId;
+
+    Long eventId;
 }
