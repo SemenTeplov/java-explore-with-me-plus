@@ -1,6 +1,6 @@
 package main.java.ru.practicum.persistence.repository;
 
-import main.java.ru.practicum.persistence.entity.Category;
+import main.java.ru.practicum.persistence.entity.Initiator;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,11 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface CategoryRepository extends JpaRepository<Category, Long> {
+public interface InitiatorRepository extends JpaRepository<Initiator, Long> {
     @Query(nativeQuery = true, value = """
             SELECT *
-            FROM categories
-            WHERE categories.id = ANY(:ids)
+            FROM initiators
+            WHERE id = ANY(:ids)
             """)
-    List<Category> getCategoriesByIds(@Param("ids") Long[] ids);
+    List<Initiator> getInitiatorByCompilationIds(@Param("ids") Long[] ids);
 }

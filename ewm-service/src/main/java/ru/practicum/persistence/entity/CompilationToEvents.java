@@ -14,44 +14,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.time.OffsetDateTime;
-
 @Entity
+@Table(name = "compilation_to_events")
 @Getter
 @Setter
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "events")
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class Event {
+public class CompilationToEvents {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String annotation;
+    Long compilationId;
 
-    Integer confirmedRequests;
-
-    Long category;
-
-    String description;
-
-    OffsetDateTime eventDate;
-
-    Long location;
-
-    Long initiator;
-
-    Boolean paid;
-
-    Integer participantLimit;
-
-    Boolean requestModeration;
-
-    String title;
-
-    String state;
-
-    Long views;
+    Long eventId;
 }
