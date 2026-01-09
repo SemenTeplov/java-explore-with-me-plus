@@ -22,36 +22,18 @@ import java.time.OffsetDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "events")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Event {
+@Table(name = "requests")
+public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String annotation;
+    OffsetDateTime created;
 
-    Integer confirmedRequests;
+    Long event;
 
-    Long category;
+    Long requester;
 
-    String description;
-
-    OffsetDateTime eventDate;
-
-    Long location;
-
-    Long initiator;
-
-    Boolean paid;
-
-    Integer participantLimit;
-
-    Boolean requestModeration;
-
-    String title;
-
-    String state;
-
-    Long views;
+    String status;
 }

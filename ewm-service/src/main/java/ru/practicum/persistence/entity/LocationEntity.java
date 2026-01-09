@@ -14,44 +14,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.time.OffsetDateTime;
-
 @Entity
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "events")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Event {
+@Table(name = "locations")
+public class LocationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String annotation;
+    Float lat;
 
-    Integer confirmedRequests;
-
-    Long category;
-
-    String description;
-
-    OffsetDateTime eventDate;
-
-    Long location;
-
-    Long initiator;
-
-    Boolean paid;
-
-    Integer participantLimit;
-
-    Boolean requestModeration;
-
-    String title;
-
-    String state;
-
-    Long views;
+    Float lon;
 }

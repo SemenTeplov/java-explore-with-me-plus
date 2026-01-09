@@ -1,4 +1,4 @@
-package ru.practicum.exception;
+package main.java.ru.practicum.exception;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,6 +10,8 @@ import org.hibernate.exception.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -18,6 +20,8 @@ import ru.practicum.openapi.model.ApiError;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+
+import ru.practicum.openapi.model.ApiError;
 
 @RestControllerAdvice
 @Slf4j
@@ -60,17 +64,109 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
+  
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiError> handleHttpMessageNotReadableException (HttpMessageNotReadableException  e) {
+        log.info(Messages.MESSAGE_NOT_READABLE, e.getMessage(), e);
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_NOT_READABLE)
+                .message(Exceptions.EXCEPTION_NOT_READABLE)
+                .status(ApiError.StatusEnum._400_BAD_REQUEST)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiError> handleMethodArgumentNotValidException (MethodArgumentNotValidException  e) {
+        log.info(Messages.MESSAGE_NOT_VALID, e.getMessage(), e);
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_NOT_VALID)
+                .message(Exceptions.EXCEPTION_NOT_VALID)
+                .status(ApiError.StatusEnum._400_BAD_REQUEST)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiError> handleNotFoundException(NotFoundException e) {
+        log.info(Messages.MESSAGE_NOT_FOUND, e.getMessage());
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_NOT_FOUND)
+                .message(Exceptions.EXCEPTION_NOT_FOUND)
+                .status(ApiError.StatusEnum._404_NOT_FOUND)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(MismatchDateException.class)
+    public ResponseEntity<ApiError> handleMismatchDateException(MismatchDateException e) {
+        log.info(Messages.MESSAGE_DATE_MISMATCH, e.getMessage());
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_DATE_MISMATCH)
+                .message(Exceptions.EXCEPTION_DATE_MISMATCH)
+                .status(ApiError.StatusEnum._409_CONFLICT)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(LimitRequestsExceededException.class)
+    public ResponseEntity<ApiError> handleLimitRequestsExceededException(LimitRequestsExceededException e) {
+        log.info(Messages.MESSAGE_LIMIT_EXCEEDED, e.getMessage());
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_LIMIT_EXCEEDED)
+                .message(Exceptions.EXCEPTION_LIMIT_EXCEEDED)
+                .status(ApiError.StatusEnum._409_CONFLICT)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(NotRespondStatusException.class)
+    public ResponseEntity<ApiError> handleNotRespondStatusException(NotRespondStatusException e) {
+        log.info(Messages.MESSAGE_NOT_RESPOND_STATUS, e.getMessage());
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_NOT_RESPOND_STATUS)
+                .message(Exceptions.EXCEPTION_NOT_RESPOND_STATUS)
+                .status(ApiError.StatusEnum._409_CONFLICT)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleException(Exception ex) {
-        log.error(Messages.EXCEPTION, ex);
-        ApiError body = new ApiError(Arrays.stream(
-                ex.getStackTrace()).map(String::valueOf).toList(),
-                Exceptions.EXCEPTION,
-                Messages.EXCEPTION,
-                ApiError.StatusEnum._500_INTERNAL_SERVER_ERROR,
-                LocalDateTime.now().toString());
+    public ResponseEntity<ApiError> handleException(Exception e) {
+        log.info(Messages.MESSAGE_INTERNAL_SERVER, e.getMessage(), e);
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Messages.MESSAGE_INTERNAL_SERVER)
+                .message(Exceptions.EXCEPTION_INTERNAL_SERVER)
+                .status(ApiError.StatusEnum._500_INTERNAL_SERVER_ERROR)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }

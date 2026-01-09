@@ -4,9 +4,12 @@ import main.java.ru.practicum.persistence.entity.Category;
 
 import org.mapstruct.Mapper;
 
+import ru.practicum.openapi.model.NewCategoryDto;
 import ru.practicum.openapi.model.CategoryDto;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
-    CategoryDto categoryToCategoryDto(Category category);
+    public Category toCategory(NewCategoryDto newCategoryDto);
+
+    public CategoryDto toCategoryDto(Category category);
 }
