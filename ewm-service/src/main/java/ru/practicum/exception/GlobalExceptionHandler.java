@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import main.java.ru.practicum.constant.Exceptions;
 import main.java.ru.practicum.constant.Messages;
-import main.java.ru.practicum.exception.NotFoundCompletion;
 
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -21,13 +20,11 @@ import ru.practicum.openapi.model.ApiError;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-import ru.practicum.openapi.model.ApiError;
-
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler({NotFoundCompletion.class})
-    public ResponseEntity<ApiError> handleNotFoundCompletion(Exception ex) {
+    public ResponseEntity<ApiError> handleNotFoundCompletion(NotFoundCompletion ex) {
         log.warn(Messages.NOT_FOUND_COMPLETION, ex);
         ApiError body = new ApiError(Arrays.stream(
                 ex.getStackTrace()).map(String::valueOf).toList(),
@@ -40,7 +37,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
-    public ResponseEntity<ApiError> handleMethodArgumentTypeMismatchException(Exception ex) {
+    public ResponseEntity<ApiError> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         log.warn(Messages.METHOD_ARGUMENT_TYPE_MISMATCH_EXCEPTION, ex);
         ApiError body = new ApiError(Arrays.stream(
                 ex.getStackTrace()).map(String::valueOf).toList(),
@@ -53,7 +50,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
-    public ResponseEntity<ApiError> handleConstraintViolationException(Exception ex) {
+    public ResponseEntity<ApiError> handleConstraintViolationException(ConstraintViolationException ex) {
         log.warn(Messages.CONSTRAINT_VIOLATION_EXCEPTION, ex);
         ApiError body = new ApiError(Arrays.stream(
                 ex.getStackTrace()).map(String::valueOf).toList(),

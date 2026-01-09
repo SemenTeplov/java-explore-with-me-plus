@@ -3,13 +3,10 @@ package main.java.ru.practicum.constant;
 public class Exceptions {
     public static final String NOT_FOUND_COMPLETION = "Подборка событий не найдена";
     public static final String METHOD_ARGUMENT_TYPE_MISMATCH_EXCEPTION = "Некорректный запрос.";
-    public static final String EXCEPTION = "Внутренняя ошибка сервера. Подождите несколько минут и попробуйте снова.";
     public static final String CONSTRAINT_VIOLATION_EXCEPTION = "Нарушение целостности данных";
     public static final String EXCEPTION_INTERNAL_SERVER = "Внутренняя ошибка сервера. Подождите несколько минут и попробуйте снова.";
-    public static final String EXCEPTION_UNPROCESSABLE_ENTITY = "Недопустимый аргумент.";
     public static final String EXCEPTION_NOT_VALID = "Валидация не пройдена. Недопустимое значение.";
     public static final String EXCEPTION_NOT_READABLE = "Тело запроса не читаемо.";
-    public static final String EXCEPTION_CONSTRAINT_VIOLATION = "Недопустимое значение.";
     public static final String EXCEPTION_NOT_FOUND = "Объект не найден, 404";
     public static final String EXCEPTION_NOT_FOUND_USER = "Пользователь с id=%d не найден";
     public static final String EXCEPTION_DATE_MISMATCH = "Дата не соответствует требованиям 409";

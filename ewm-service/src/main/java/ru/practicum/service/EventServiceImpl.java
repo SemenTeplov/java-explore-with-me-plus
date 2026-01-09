@@ -46,7 +46,6 @@ import ru.practicum.openapi.model.UpdateEventUserRequest;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

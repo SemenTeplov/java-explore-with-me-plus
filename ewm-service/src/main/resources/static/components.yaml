@@ -150,10 +150,6 @@ components:
     UpdateCompilationRequest:
       type: object
       description: Подборка событий
-      required:
-        - events
-        - pinned
-        - title
       properties:
         events:
           type: array
