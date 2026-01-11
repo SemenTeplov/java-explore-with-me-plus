@@ -87,9 +87,9 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
-  
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiError> handleHttpMessageNotReadableException (HttpMessageNotReadableException  e) {
+    public ResponseEntity<ApiError> handleHttpMessageNotReadableException(HttpMessageNotReadableException  e) {
         log.info(Messages.MESSAGE_NOT_READABLE, e.getMessage(), e);
 
         ApiError error = ApiError.builder()
@@ -104,7 +104,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleMethodArgumentNotValidException (MethodArgumentNotValidException  e) {
+    public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException  e) {
         log.info(Messages.MESSAGE_NOT_VALID, e.getMessage(), e);
 
         ApiError error = ApiError.builder()

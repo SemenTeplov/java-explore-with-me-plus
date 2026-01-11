@@ -1,6 +1,5 @@
 package main.java.ru.practicum.service;
 
-import main.java.ru.practicum.persistence.entity.Category;
 import ru.practicum.openapi.model.CategoryDto;
 import ru.practicum.openapi.model.NewCategoryDto;
 

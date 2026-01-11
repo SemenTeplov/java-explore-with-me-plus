@@ -1,7 +1,5 @@
 package main.java.ru.practicum.constant;
 
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 public class Messages {
     public static final String GET_COMPILATIONS = "Пришел запрос на получение подборки событий";
     public static final String GET_COMPILATION = "Пришел запрос на получение подборки события по id {}";

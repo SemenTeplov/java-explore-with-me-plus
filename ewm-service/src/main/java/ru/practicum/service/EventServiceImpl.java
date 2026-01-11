@@ -97,8 +97,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public ResponseEntity<EventRequestStatusUpdateResult> changeRequestStatus
-            (Long userId, Long eventId, EventRequestStatusRequest eventRequestStatusRequest) {
+    public ResponseEntity<EventRequestStatusUpdateResult> changeRequestStatus(Long userId,
+                                                                              Long eventId,
+                                                                              EventRequestStatusRequest eventRequestStatusRequest) {
         log.info(Messages.MESSAGE_CHANGE_STATUS);
 
         userRepository.findById(userId)
