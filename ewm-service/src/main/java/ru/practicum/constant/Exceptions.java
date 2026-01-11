@@ -12,4 +12,11 @@ public class Exceptions {
     public static final String EXCEPTION_DATE_MISMATCH = "Дата не соответствует требованиям 409";
     public static final String EXCEPTION_LIMIT_EXCEEDED = "Лимит запросов превышен, код ошибки 409";
     public static final String EXCEPTION_NOT_RESPOND_STATUS = "Статус запросов должен быть PENDING код ошибки 409";
+    public static final String EXCEPTION_EVENT_NOT_FOUND = "Событие с id=%d не найдено";
+    public static final String EXCEPTION_REQUEST_EXIST = "Запрос уже существует";
+    public static final String EXCEPTION_REQUEST_INITIATOR_OWN = "Инициатор не может отправлять запросы на собственное мероприятие.";
+    public static final String EXCEPTION_REQUEST_NOT_PUBLISHED = "Участие возможно только в опубликованном мероприятии.";
+    public static final String EXCEPTION_REQUEST_LIMIT = "Достигнут лимит участников.";
+    public static final String EXCEPTION_USER_NOT_INITIATOR = "Пользователь не инициатор события";
+    public static final String EXCEPTION_LIMIT_REACHED = "The participant limit has been reached.";
 }
