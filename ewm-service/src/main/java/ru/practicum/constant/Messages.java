@@ -38,4 +38,7 @@ public class Messages {
     public static final String MESSAGE_GET_EVENTS_FOR_ADMIN = "Поступил запрос на получение события администратором";
     public static final String MESSAGE_GET_EVENTS_FOR_USER = "Поступил запрос на получение события пользователем";
     public static final String MESSAGE_UPDATE_EVENT = "Поступил запрос на обновление события";
+    public static final String MESSAGE_ADDED_REQUEST = "Заявка создана успешно. ID заявки: {}, статус: {}";
+    public static final String MESSAGE_CANCEL_REQUEST = "Заявка {} успешно отменена пользователем {}";
+    public static final String MESSAGE_GET_REQUESTS = "Найдено {} заявок для пользователя {}";
 }
