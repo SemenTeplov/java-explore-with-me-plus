@@ -77,7 +77,7 @@ public class RequestServiceImpl implements RequestService {
         }
         long confirmedRequests = requestRepository.countByEventIdAndStatus(eventId, CONFIRMED);
         if (event.getParticipantLimit() > 0 && event.getParticipantLimit() <= confirmedRequests) {
-            throw new ForbiddenException(Exceptions.EXCEPTION_LIMIT_REACHED);
+            throw new ForbiddenException(Exceptions.EXCEPTION_REQUEST_LIMIT);
         }
         List<ParticipationRequestDto> confirmed = new ArrayList<>();
         List<ParticipationRequestDto> rejected = new ArrayList<>();
