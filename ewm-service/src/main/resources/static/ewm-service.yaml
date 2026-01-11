@@ -823,7 +823,7 @@ paths:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
 
-  /events{id}:
+  /events/{id}:
     get:
       tags:
         - Event
@@ -944,7 +944,7 @@ paths:
                 $ref: 'components.yaml#/components/schemas/ApiError'
 
   /users/{userId}/requests/{requestId}/cancel:
-    get:
+    patch:
       tags:
         - Request
       summary: Отмена своего запроса на участие в событии.

@@ -11,6 +11,7 @@ import main.java.ru.practicum.dto.GetEventsRequest;
 import main.java.ru.practicum.exception.LimitRequestsExceededException;
 import main.java.ru.practicum.exception.MismatchDateException;
 import main.java.ru.practicum.exception.NotFoundException;
+import main.java.ru.practicum.exception.NotMeetRulesEditionException;
 import main.java.ru.practicum.exception.NotRespondStatusException;
 import main.java.ru.practicum.mapper.CategoryMapper;
 import main.java.ru.practicum.mapper.EventMapper;
@@ -89,9 +90,10 @@ public class EventServiceImpl implements EventService {
         Event event = eventMapper.newEventDtoToEvent(newEventDto);
         event.setInitiator(userId);
         event.setLocation(location.getId());
+        event.setState(EventFullDto.StateEnum.PENDING.toString());
         event = eventRepository.save(event);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(getEventFullDto(event, location).state(EventFullDto.StateEnum.PENDING));
+        return ResponseEntity.status(HttpStatus.CREATED).body(getEventFullDto(event, location));
     }
 
     @Override
@@ -104,7 +106,7 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
         List<Request> requests = requestRepository
-                .getRequestsByIds(eventRequestStatusRequest.getRequestIds().toArray(new Long[0]));
+                .getRequestsByIds(eventRequestStatusRequest.getRequestIds().toArray(Long[]::new));
 
         if (event.getParticipantLimit() < requests.size()) {
             throw new LimitRequestsExceededException(Exceptions.EXCEPTION_LIMIT_EXCEEDED);
@@ -139,7 +141,7 @@ public class EventServiceImpl implements EventService {
         LocationEntity location = locationRepository.findById(event.getLocation())
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(getEventFullDto(event, location));
+        return ResponseEntity.ok(getEventFullDto(event, location));
     }
 
     @Override
@@ -229,9 +231,24 @@ public class EventServiceImpl implements EventService {
         }
 
         eventMapper.updateEventUserRequestToEvent(event, location.getId(), updateEventUserRequest);
+
+        if (updateEventUserRequest.getStateAction() != null) {
+            if (!event.getState().equals(EventFullDto.StateEnum.PUBLISHED.toString())
+                    && updateEventUserRequest.getStateAction()
+                    .equals(UpdateEventUserRequest.StateActionEnum.CANCEL_REVIEW)) {
+                event.setState(EventFullDto.StateEnum.CANCELED.toString());
+            } else if (!event.getState().equals(EventFullDto.StateEnum.PUBLISHED.toString())
+                    && updateEventUserRequest.getStateAction()
+                    .equals(UpdateEventUserRequest.StateActionEnum.SEND_TO_REVIEW)) {
+                event.setState(EventFullDto.StateEnum.PUBLISHED.toString());
+            } else {
+                throw new NotMeetRulesEditionException(Exceptions.EXCEPTION_NOT_MEET_RULES);
+            }
+        }
+
         eventRepository.save(event);
 
-        return ResponseEntity.ok(getEventFullDto(event, location).state(EventFullDto.StateEnum.CANCELED));
+        return ResponseEntity.ok(getEventFullDto(event, location));
     }
 
     @Override
@@ -256,6 +273,20 @@ public class EventServiceImpl implements EventService {
 
         eventMapper.updateEventAdminRequestToEvent(event, location.getId(), updateEventAdminRequest);
 
+        if (updateEventAdminRequest.getStateAction() != null) {
+            if (!event.getState().equals(EventFullDto.StateEnum.PUBLISHED.toString())
+                    && updateEventAdminRequest.getStateAction()
+                    .equals(UpdateEventAdminRequest.StateActionEnum.REJECT_EVENT)) {
+                event.setState(EventFullDto.StateEnum.CANCELED.toString());
+            } else if (event.getState().equals(EventFullDto.StateEnum.PENDING.toString())
+                    && updateEventAdminRequest.getStateAction()
+                    .equals(UpdateEventAdminRequest.StateActionEnum.PUBLISH_EVENT)) {
+                event.setState(EventFullDto.StateEnum.PUBLISHED.toString());
+            } else {
+                throw new NotMeetRulesEditionException(Exceptions.EXCEPTION_NOT_MEET_RULES);
+            }
+        }
+
         return ResponseEntity.ok(getEventFullDto(eventRepository.save(event), location));
     }
 
@@ -268,7 +299,6 @@ public class EventServiceImpl implements EventService {
 
         EventFullDto eventFullDto = eventMapper.eventToEventFullDto(event);
 
-        eventFullDto.setState(EventFullDto.StateEnum.PUBLISHED);
         eventFullDto.setPublishedOn(OffsetDateTime.now().format(DateTimeFormatter.ofPattern(Values.DATE_TIME_PATTERN)));
         eventFullDto.setInitiator(userMapper.userToUserShortDto(user));
         eventFullDto.setCategory(categoryMapper.toCategoryDto(category));

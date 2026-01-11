@@ -60,7 +60,7 @@ public class EventSpecification {
                 predicates.add(cb.greaterThan(r.get("participantLimit"), 0));
             }
 
-            return cb.and(predicates.toArray(new Predicate[0]));
+            return cb.and(predicates.toArray(Predicate[]::new));
         };
 
         Pageable pageable;

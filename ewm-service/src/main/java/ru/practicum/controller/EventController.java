@@ -49,7 +49,7 @@ public class EventController implements EventApi {
 
     @Override
     public ResponseEntity<EventFullDto> _getEventUser(Long userId, Long eventId) {
-        return null;
+        return eventService.getEventUser(userId, eventId);
     }
 
     @Override

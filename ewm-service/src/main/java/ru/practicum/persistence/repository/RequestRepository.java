@@ -2,12 +2,12 @@ package main.java.ru.practicum.persistence.repository;
 
 import main.java.ru.practicum.persistence.entity.Request;
 
-import main.java.ru.practicum.persistence.status.StatusRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query(nativeQuery = true, value = """
@@ -24,13 +24,33 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             """)
     List<Request> getRequestsByUserIdAndEventId(@Param("userId") Long userId, @Param("eventId") Long eventId);
 
-    Boolean existsByRequesterIdAndEventId(Long userId, Long eventId);
+    @Query(nativeQuery = true, value = """
+            SELECT COUNT(id)
+            FROM requests
+            WHERE status = :statusRequest AND event = :eventId
+            """)
+    Long countByEventIdAndStatus(@Param("eventId") Long eventId, @Param("statusRequest") String statusRequest);
 
-    Long countByEventIdAndStatus(Long eventId, StatusRequest statusRequest);
+    @Query(nativeQuery = true, value = """
+            SELECT *
+            FROM requests
+            WHERE status = :statusRequest AND event = :eventId AND id = ANY(:requestIds)
+            """)
+    List<Request> findAllByEventIdAndIdInAndStatus(@Param("eventId") Long eventId,
+                                                   @Param("requestIds") Long[] requestIds,
+                                                   @Param("statusRequest") String statusRequest);
 
-    List<Request> findAllByEventIdAndIdInAndStatus(Long eventId, List<Long> requestIds, StatusRequest statusRequest);
+    @Query(nativeQuery = true, value = """
+            SELECT *
+            FROM requests
+            WHERE requester = :userId AND id = :requestId
+            """)
+    Optional<Request> findByIdAndRequesterId(@Param("requestId") Long requestId, @Param("userId") Long userId);
 
-    Request findByIdAndRequesterId(Long requestId, Long userId);
-
-    List<Request> findAllByRequesterId(Long userId);
+    @Query(nativeQuery = true, value = """
+            SELECT *
+            FROM requests
+            WHERE requester = :userId
+            """)
+    List<Request> findAllByRequesterId(@Param("userId") Long userId);
 }

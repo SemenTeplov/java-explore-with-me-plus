@@ -35,13 +35,16 @@ public interface EventMapper {
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "initiator", ignore = true)
     @Mapping(target = "location", ignore = true)
+    @Mapping(target = "state", qualifiedByName = "toStatusEnum")
     @Mapping(target = "eventDate", qualifiedByName = "toStringFromTime")
     EventFullDto eventToEventFullDto(Event event);
 
+    @Mapping(target = "created", source = "created", qualifiedByName = "toStringFromTime")
     ParticipationRequestDto requestToParticipationRequestDto(Request requests);
 
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "initiator", ignore = true)
+    @Mapping(target = "eventDate", qualifiedByName = "toStringFromTime")
     EventShortDto eventToEventShortDto(Event event);
 
     @Mapping(target = "eventDate", qualifiedByName = "toOffsetDateTime")
@@ -68,5 +71,10 @@ public interface EventMapper {
     @Named("toStringFromTime")
     default String toStringFromTime(OffsetDateTime date) {
         return date.format(DateTimeFormatter.ofPattern(Values.DATE_TIME_PATTERN));
+    }
+
+    @Named("toStatusEnum")
+    default EventFullDto.StateEnum toStatusEnum(String status) {
+        return EventFullDto.StateEnum.valueOf(status);
     }
 }

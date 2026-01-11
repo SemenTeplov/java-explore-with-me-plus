@@ -18,4 +18,5 @@ public class Exceptions {
     public static final String EXCEPTION_REQUEST_NOT_PUBLISHED = "Участие возможно только в опубликованном мероприятии.";
     public static final String EXCEPTION_REQUEST_LIMIT = "Достигнут лимит участников.";
     public static final String EXCEPTION_USER_NOT_INITIATOR = "Пользователь не инициатор события";
+    public static final String EXCEPTION_NOT_MEET_RULES = "Не соответствет требованиям.";
 }

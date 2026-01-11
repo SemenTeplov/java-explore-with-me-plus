@@ -49,6 +49,32 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
+    @ExceptionHandler({ForbiddenException.class})
+    public ResponseEntity<ApiError> handleForbiddenException(ForbiddenException ex) {
+        log.warn(Exceptions.EXCEPTION_REQUEST_EXIST, ex);
+        ApiError body = new ApiError(Arrays.stream(
+                ex.getStackTrace()).map(String::valueOf).toList(),
+                Exceptions.EXCEPTION_REQUEST_EXIST,
+                Exceptions.EXCEPTION_REQUEST_EXIST,
+                ApiError.StatusEnum._409_CONFLICT,
+                LocalDateTime.now().toString());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
+    @ExceptionHandler({NotMeetRulesEditionException.class})
+    public ResponseEntity<ApiError> handleNotMeetRulesEditionException(NotMeetRulesEditionException ex) {
+        log.warn(Exceptions.EXCEPTION_NOT_MEET_RULES, ex);
+        ApiError body = new ApiError(Arrays.stream(
+                ex.getStackTrace()).map(String::valueOf).toList(),
+                Exceptions.EXCEPTION_NOT_MEET_RULES,
+                Exceptions.EXCEPTION_NOT_MEET_RULES,
+                ApiError.StatusEnum._409_CONFLICT,
+                LocalDateTime.now().toString());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<ApiError> handleConstraintViolationException(ConstraintViolationException ex) {
         log.warn(Messages.CONSTRAINT_VIOLATION_EXCEPTION, ex);
