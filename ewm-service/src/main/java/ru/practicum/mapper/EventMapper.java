@@ -65,12 +65,13 @@ public interface EventMapper {
 
         return ZonedDateTime.of(
                 LocalDateTime.parse(str, FORMATTER),
-                ZoneId.systemDefault()).toOffsetDateTime();
+                ZoneId.of("UTC")).toOffsetDateTime();
     }
 
     @Named("toStringFromTime")
     default String toStringFromTime(OffsetDateTime date) {
-        return date.format(DateTimeFormatter.ofPattern(Values.DATE_TIME_PATTERN));
+        return date.atZoneSameInstant(ZoneId.of("UTC"))
+                .format(DateTimeFormatter.ofPattern(Values.DATE_TIME_PATTERN));
     }
 
     @Named("toStatusEnum")
