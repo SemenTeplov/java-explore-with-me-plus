@@ -31,7 +31,7 @@ public class RequestController implements RequestApi {
 
     @Override
     public ResponseEntity<ParticipationRequestDto> _cancelRequest(Long userId, Long requestId) {
-        requestService.cancelRequest(userId, requestId);
+        //requestService.cancelRequest(userId, requestId); <- два вызова в одном методе -_-
         log.info(Messages.MESSAGE_CANCEL_REQUEST, requestId, userId);
 
         return ResponseEntity.ok(requestService.cancelRequest(userId, requestId));

@@ -8,11 +8,7 @@ import main.java.ru.practicum.constant.Messages;
 import main.java.ru.practicum.constant.Values;
 import main.java.ru.practicum.dto.GetEventsForAdminRequest;
 import main.java.ru.practicum.dto.GetEventsRequest;
-import main.java.ru.practicum.exception.LimitRequestsExceededException;
-import main.java.ru.practicum.exception.MismatchDateException;
-import main.java.ru.practicum.exception.NotFoundException;
-import main.java.ru.practicum.exception.NotMeetRulesEditionException;
-import main.java.ru.practicum.exception.NotRespondStatusException;
+import main.java.ru.practicum.exception.*;
 import main.java.ru.practicum.mapper.CategoryMapper;
 import main.java.ru.practicum.mapper.EventMapper;
 import main.java.ru.practicum.mapper.LocationMapper;
@@ -82,6 +78,7 @@ public class EventServiceImpl implements EventService {
     public ResponseEntity<EventFullDto> addEvent(Long userId, NewEventDto newEventDto) {
         log.info(Messages.MESSAGE_ADD_EVENT, userId, newEventDto);
 
+        validateEventFields(newEventDto);
         checkDate(newEventDto.getEventDate());
 
         LocationEntity location = locationRepository
@@ -91,6 +88,8 @@ public class EventServiceImpl implements EventService {
         event.setInitiator(userId);
         event.setLocation(location.getId());
         event.setState(EventFullDto.StateEnum.PENDING.toString());
+        event.setConfirmedRequests(0);
+        event.setViews(0L);
         event = eventRepository.save(event);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(getEventFullDto(event, location));
@@ -125,11 +124,13 @@ public class EventServiceImpl implements EventService {
         EventRequestStatusUpdateResult result;
 
         if (eventRequestStatusRequest.getStatus().equals(EventRequestStatusRequest.StatusEnum.CONFIRMED)) {
+            event.setConfirmedRequests(event.getConfirmedRequests() + participationRequestDto.size());
             result = EventRequestStatusUpdateResult.builder().confirmedRequests(participationRequestDto).build();
         } else {
             result = EventRequestStatusUpdateResult.builder().rejectedRequests(participationRequestDto).build();
         }
 
+        eventRepository.save(event);
         return ResponseEntity.ok(result);
     }
 
@@ -139,6 +140,9 @@ public class EventServiceImpl implements EventService {
 
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
+        if (!event.getState().equals(EventFullDto.StateEnum.PUBLISHED.toString())) {
+            throw new NotFoundException("Событие не найдено или недоступно");
+        }
         LocationEntity location = locationRepository.findById(event.getLocation())
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
 
@@ -170,6 +174,8 @@ public class EventServiceImpl implements EventService {
     @Override
     public ResponseEntity<List<EventShortDto>> getEvents(GetEventsRequest request) {
         log.info(Messages.MESSAGE_GET_EVENTS);
+
+        validateDateRange(request.getRangeStart(), request.getRangeEnd());
 
         List<EventShortDto> list = eventSpecification.getPagesFromGetEventsRequest(request, eventRepository)
                 .stream()
@@ -216,7 +222,10 @@ public class EventServiceImpl implements EventService {
     public ResponseEntity<EventFullDto> updateEvent(Long userId, Long eventId,
                                                     UpdateEventUserRequest updateEventUserRequest) {
         log.info(Messages.MESSAGE_UPDATE_EVENT);
-
+        if (updateEventUserRequest.getParticipantLimit() != null &&
+                updateEventUserRequest.getParticipantLimit() < 0) {
+            throw new ValidationException("Поле participantLimit не может быть отрицательным");
+        }
         checkDate(updateEventUserRequest.getEventDate());
 
         Event event = eventRepository.getEventByUserIdAndEventId(userId, eventId)
@@ -234,16 +243,24 @@ public class EventServiceImpl implements EventService {
         eventMapper.updateEventUserRequestToEvent(event, location.getId(), updateEventUserRequest);
 
         if (updateEventUserRequest.getStateAction() != null) {
-            if (!event.getState().equals(EventFullDto.StateEnum.PUBLISHED.toString())
-                    && updateEventUserRequest.getStateAction()
-                    .equals(UpdateEventUserRequest.StateActionEnum.CANCEL_REVIEW)) {
-                event.setState(EventFullDto.StateEnum.CANCELED.toString());
-            } else if (!event.getState().equals(EventFullDto.StateEnum.PUBLISHED.toString())
-                    && updateEventUserRequest.getStateAction()
-                    .equals(UpdateEventUserRequest.StateActionEnum.SEND_TO_REVIEW)) {
-                event.setState(EventFullDto.StateEnum.PUBLISHED.toString());
-            } else {
-                throw new NotMeetRulesEditionException(Exceptions.EXCEPTION_NOT_MEET_RULES);
+            switch (updateEventUserRequest.getStateAction()) {
+                case CANCEL_REVIEW:
+                    if (event.getState().equals(EventFullDto.StateEnum.PENDING.toString()) ||
+                            event.getState().equals(EventFullDto.StateEnum.CANCELED.toString())) {
+                        event.setState(EventFullDto.StateEnum.CANCELED.toString());
+                    } else {
+                        throw new NotMeetRulesEditionException(Exceptions.EXCEPTION_NOT_MEET_RULES);
+                    }
+                    break;
+                case SEND_TO_REVIEW:
+                    if (event.getState().equals(EventFullDto.StateEnum.CANCELED.toString())) {
+                        event.setState(EventFullDto.StateEnum.PENDING.toString());
+                    } else {
+                        throw new NotMeetRulesEditionException(Exceptions.EXCEPTION_NOT_MEET_RULES);
+                    }
+                    break;
+                default:
+                    throw new NotMeetRulesEditionException(Exceptions.EXCEPTION_NOT_MEET_RULES);
             }
         }
 
@@ -255,7 +272,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public ResponseEntity<EventFullDto> updateEventAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         log.info(Messages.MESSAGE_UPDATE_EVENT);
-
+        if (updateEventAdminRequest.getParticipantLimit() != null &&
+                updateEventAdminRequest.getParticipantLimit() < 0) {
+            throw new ValidationException("Поле participantLimit не может быть отрицательным");
+        }
+        if (updateEventAdminRequest.getParticipantLimit() != null &&
+                updateEventAdminRequest.getParticipantLimit() < 0) {
+            throw new ValidationException("Поле participantLimit не может быть отрицательным");
+        }
         checkDate(updateEventAdminRequest.getEventDate());
 
         LocationEntity location = null;
@@ -326,12 +350,44 @@ public class EventServiceImpl implements EventService {
             return;
         }
 
+        ZoneId zoneId = ZoneId.of("UTC");
         OffsetDateTime dateTime = ZonedDateTime.of(
                 LocalDateTime.parse(time, DateTimeFormatter.ofPattern(Values.DATE_TIME_PATTERN)),
-                ZoneId.systemDefault()).toOffsetDateTime();
+                zoneId).toOffsetDateTime();
 
-        if (Duration.between(OffsetDateTime.now(ZoneId.systemDefault()), dateTime).toHours() < 2) {
+        if (Duration.between(OffsetDateTime.now(zoneId), dateTime).toHours() < 2) {
             throw new MismatchDateException(Exceptions.EXCEPTION_DATE_MISMATCH);
         }
     }
+
+    private void validateEventFields(NewEventDto newEventDto) {
+        if (newEventDto.getAnnotation() != null && newEventDto.getAnnotation().trim().isEmpty()) {
+            throw new ValidationException("Поле annotation не может состоять только из пробелов");
+        }
+        if (newEventDto.getDescription() != null && newEventDto.getDescription().trim().isEmpty()) {
+            throw new ValidationException("Поле description не может состоять только из пробелов");
+        }
+        if (newEventDto.getTitle() != null && newEventDto.getTitle().trim().isEmpty()) {
+            throw new ValidationException("Поле title не может состоять только из пробелов");
+        }
+        if (newEventDto.getParticipantLimit() != null) {
+            if (newEventDto.getParticipantLimit() < 0) {
+                throw new ValidationException("Поле participantLimit не может быть отрицательным");
+            }
+        }
+    }
+
+    private void validateDateRange(String rangeStart, String rangeEnd) {
+        if (rangeStart != null && rangeEnd != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Values.DATE_TIME_PATTERN);
+
+            LocalDateTime start = LocalDateTime.parse(rangeStart, formatter);
+            LocalDateTime end = LocalDateTime.parse(rangeEnd, formatter);
+
+            if (start.isAfter(end)) {
+                throw new ValidationException("Дата начала диапазона не может быть позже даты окончания");
+            }
+        }
+    }
+    
 }
