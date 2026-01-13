@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import main.java.ru.practicum.constant.Exceptions;
 import main.java.ru.practicum.constant.Messages;
 import main.java.ru.practicum.exception.ForbiddenException;
+import main.java.ru.practicum.exception.ValidationException;
 import main.java.ru.practicum.mapper.CategoryMapper;
 import main.java.ru.practicum.persistence.entity.Category;
 import main.java.ru.practicum.persistence.repository.CategoryRepository;
@@ -30,6 +31,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto addCategory(NewCategoryDto newCategoryDto) {
+        validateCategoryName(newCategoryDto.getName());
+
         if (categoryRepository.existsByName(newCategoryDto.getName())) {
             throw new ForbiddenException(String.format(Exceptions.EXCEPTION_CONFLICT_CATEGORY, newCategoryDto.getName()));
         }
@@ -39,6 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto updateCategory(Long categoryId, CategoryDto categoryDto) {
         Category category = getCategory(categoryId);
+        validateCategoryName(categoryDto.getName());
         if (!category.getName().equals(categoryDto.getName())) {
             boolean nameExists = categoryRepository.existsByNameAndIdNot(categoryDto.getName(), categoryId);
             if (nameExists) {
@@ -77,5 +81,21 @@ public class CategoryServiceImpl implements CategoryService {
     private Category getCategory(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(() ->
                 new NotFoundException(String.format(Messages.MESSAGE_CATEGORY_NOT_FOUND, categoryId)));
+    }
+
+    private void validateCategoryName(String name) {
+        if (name == null) {
+            throw new ValidationException("Имя категории обязательно для заполнения");
+        }
+        String trimmed = name.trim();
+        if (trimmed.isEmpty()) {
+            throw new ValidationException("Имя категории не может быть пустым или состоять только из пробелов");
+        }
+        if (trimmed.length() < 1) {
+            throw new ValidationException("Имя категории должно содержать хотя бы 1 символ");
+        }
+        if (trimmed.length() > 50) {
+            throw new ValidationException("Имя категории не может превышать 50 символов");
+        }
     }
 }

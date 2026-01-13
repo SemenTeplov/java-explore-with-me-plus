@@ -35,10 +35,6 @@ public class UserServiceImpl implements UserService {
     public UserDto addUser(NewUserRequest newUserRequest) {
         validateEmail(newUserRequest.getEmail());
         validateName(newUserRequest.getName());
-        String trimmedEmail = newUserRequest.getEmail().trim();
-        String trimmedName = newUserRequest.getName().trim();
-        newUserRequest.setEmail(trimmedEmail);
-        newUserRequest.setName(trimmedName);
         if (userRepository.existsByEmail(newUserRequest.getEmail())) {
             throw new ForbiddenException(String.format(Exceptions.EXCEPTION_CONFLICT_EMAIL, newUserRequest.getEmail()));
         }
