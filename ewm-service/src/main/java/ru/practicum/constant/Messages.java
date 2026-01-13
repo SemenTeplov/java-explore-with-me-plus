@@ -39,4 +39,5 @@ public class Messages {
     public static final String MESSAGE_ADDED_REQUEST = "Заявка создана успешно. ID заявки: {}, статус: {}";
     public static final String MESSAGE_CANCEL_REQUEST = "Заявка {} успешно отменена пользователем {}";
     public static final String MESSAGE_GET_REQUESTS = "Найдено {} заявок для пользователя {}";
+    public static final String MESSAGE_MISSING_SERVLET_REQUEST_PARAMETER = "Несоответствие параметров при запросе";
 }

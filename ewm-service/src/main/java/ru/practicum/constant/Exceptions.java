@@ -19,4 +19,5 @@ public class Exceptions {
     public static final String EXCEPTION_REQUEST_LIMIT = "Достигнут лимит участников.";
     public static final String EXCEPTION_USER_NOT_INITIATOR = "Пользователь не инициатор события";
     public static final String EXCEPTION_NOT_MEET_RULES = "Не соответствет требованиям.";
+    public static final String EXCEPTION_NOT_ILLEGAL_ARGUMENT = "Используется не допустимое значение";
 }

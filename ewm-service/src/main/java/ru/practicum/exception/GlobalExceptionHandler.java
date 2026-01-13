@@ -37,6 +37,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
+    @ExceptionHandler({MissingServletRequestParameterException.class})
+    public ResponseEntity<ApiError> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+        log.warn(Messages.MESSAGE_MISSING_SERVLET_REQUEST_PARAMETER, ex);
+        ApiError body = new ApiError(Arrays.stream(
+                ex.getStackTrace()).map(String::valueOf).toList(),
+                Messages.MESSAGE_MISSING_SERVLET_REQUEST_PARAMETER,
+                Messages.MESSAGE_MISSING_SERVLET_REQUEST_PARAMETER,
+                ApiError.StatusEnum._400_BAD_REQUEST,
+                LocalDateTime.now().toString());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ApiError> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         log.warn(Messages.METHOD_ARGUMENT_TYPE_MISMATCH_EXCEPTION, ex);
@@ -87,6 +100,21 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now().toString());
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiError> handleIllegalArgumentException(IllegalArgumentException  e) {
+        log.info(Exceptions.EXCEPTION_NOT_ILLEGAL_ARGUMENT, e.getMessage(), e);
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Exceptions.EXCEPTION_NOT_ILLEGAL_ARGUMENT)
+                .message(Exceptions.EXCEPTION_NOT_ILLEGAL_ARGUMENT)
+                .status(ApiError.StatusEnum._400_BAD_REQUEST)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -142,11 +170,11 @@ public class GlobalExceptionHandler {
                 .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
                 .reason(Messages.MESSAGE_DATE_MISMATCH)
                 .message(Exceptions.EXCEPTION_DATE_MISMATCH)
-                .status(ApiError.StatusEnum._409_CONFLICT)
+                .status(ApiError.StatusEnum._400_BAD_REQUEST)
                 .timestamp(LocalDateTime.now().toString())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(LimitRequestsExceededException.class)
@@ -192,24 +220,6 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-    }
-
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ApiError> handleMissingServletRequestParameterException(
-            MissingServletRequestParameterException e) {
-        log.warn("Отсутствует обязательный параметр: {}", e.getParameterName());
-
-        String message = String.format("Отсутствует обязательный параметр: '%s'", e.getParameterName());
-
-        ApiError error = ApiError.builder()
-                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
-                .reason("Некорректно составлен запрос.")
-                .message(message)
-                .status(ApiError.StatusEnum._400_BAD_REQUEST)
-                .timestamp(LocalDateTime.now().toString())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(ValidationException.class)

@@ -17,13 +17,13 @@ import main.java.ru.practicum.persistence.repository.CategoryRepository;
 import main.java.ru.practicum.persistence.repository.CompilationRepository;
 import main.java.ru.practicum.persistence.repository.CompilationToEventsRepository;
 import main.java.ru.practicum.persistence.repository.EventRepository;
-
 import main.java.ru.practicum.persistence.repository.UserRepository;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+
 import ru.practicum.openapi.model.CategoryDto;
 import ru.practicum.openapi.model.CompilationDto;
 import ru.practicum.openapi.model.EventShortDto;

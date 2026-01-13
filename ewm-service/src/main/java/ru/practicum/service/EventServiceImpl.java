@@ -140,9 +140,16 @@ public class EventServiceImpl implements EventService {
 
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
+
+        if (event.getViews() == 0) {
+            event.setViews(1L);
+            eventRepository.save(event);
+        }
+
         if (!event.getState().equals(EventFullDto.StateEnum.PUBLISHED.toString())) {
             throw new NotFoundException("Событие не найдено или недоступно");
         }
+
         LocationEntity location = locationRepository.findById(event.getLocation())
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
 
@@ -272,14 +279,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public ResponseEntity<EventFullDto> updateEventAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         log.info(Messages.MESSAGE_UPDATE_EVENT);
-        if (updateEventAdminRequest.getParticipantLimit() != null &&
-                updateEventAdminRequest.getParticipantLimit() < 0) {
-            throw new ValidationException("Поле participantLimit не может быть отрицательным");
-        }
-        if (updateEventAdminRequest.getParticipantLimit() != null &&
-                updateEventAdminRequest.getParticipantLimit() < 0) {
-            throw new ValidationException("Поле participantLimit не может быть отрицательным");
-        }
+
         checkDate(updateEventAdminRequest.getEventDate());
 
         LocationEntity location = null;
@@ -389,5 +389,5 @@ public class EventServiceImpl implements EventService {
             }
         }
     }
-    
+
 }
