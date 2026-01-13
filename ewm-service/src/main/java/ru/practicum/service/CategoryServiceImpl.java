@@ -2,7 +2,9 @@ package main.java.ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 
+import main.java.ru.practicum.constant.Exceptions;
 import main.java.ru.practicum.constant.Messages;
+import main.java.ru.practicum.exception.ForbiddenException;
 import main.java.ru.practicum.mapper.CategoryMapper;
 import main.java.ru.practicum.persistence.entity.Category;
 import main.java.ru.practicum.persistence.repository.CategoryRepository;
@@ -27,14 +29,23 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto addCategory(NewCategoryDto newCategoryDto) {
+        if (categoryRepository.existsByName(newCategoryDto.getName())) {
+            throw new ForbiddenException(String.format(Exceptions.EXCEPTION_CONFLICT_CATEGORY, newCategoryDto.getName()));
+        }
         return categoryMapper.toCategoryDto(categoryRepository.save(categoryMapper.toCategory(newCategoryDto)));
     }
 
     @Override
     public CategoryDto updateCategory(Long categoryId, CategoryDto categoryDto) {
         Category category = getCategory(categoryId);
-        category.setName(categoryDto.getName());
+        if (!category.getName().equals(categoryDto.getName())) {
+            boolean nameExists = categoryRepository.existsByNameAndIdNot(categoryDto.getName(), categoryId);
+            if (nameExists) {
+                throw new ForbiddenException(String.format(Exceptions.EXCEPTION_CONFLICT_CATEGORY, categoryDto.getName()));
+            }
+        }
 
+        category.setName(categoryDto.getName());
         return categoryMapper.toCategoryDto(categoryRepository.save(category));
     }
 

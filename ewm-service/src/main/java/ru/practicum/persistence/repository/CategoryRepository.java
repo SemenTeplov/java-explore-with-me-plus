@@ -15,4 +15,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             WHERE categories.id = ANY(:ids)
             """)
     List<Category> getCategoriesByIds(@Param("ids") Long[] ids);
+
+    boolean existsByName(String name);
+
+    boolean existsByNameAndIdNot(String name, Long id);
 }
