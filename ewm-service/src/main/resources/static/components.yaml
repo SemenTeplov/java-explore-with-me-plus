@@ -277,7 +277,10 @@ components:
         - id
         - initiator
         - location
+        - paid
+        - participantLimit
         - publishedOn
+        - requestModeration
         - state
         - title
         - views
