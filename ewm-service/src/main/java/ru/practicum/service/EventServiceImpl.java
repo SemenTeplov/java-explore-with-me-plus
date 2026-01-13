@@ -165,8 +165,18 @@ public class EventServiceImpl implements EventService {
     public ResponseEntity<List<ParticipationRequestDto>> getEventParticipants(Long userId, Long eventId) {
         log.info(Messages.MESSAGE_GET_PARTICIPANTS, userId, eventId);
 
-        List<ParticipationRequestDto> result = requestRepository.getRequestsByUserIdAndEventId(userId, eventId)
-                .stream().map(eventMapper::requestToParticipationRequestDto).toList();
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_EVENT_NOT_FOUND));
+
+        if (!event.getInitiator().equals(userId)) {
+            throw new ForbiddenException(Exceptions.EXCEPTION_ONLY_INITIATOR);
+        }
+
+        List<Request> requests = requestRepository.findAllByEventId(eventId);
+
+        List<ParticipationRequestDto> result = requests.stream()
+                .map(eventMapper::requestToParticipationRequestDto)
+                .toList();
 
         return ResponseEntity.ok(result);
     }
