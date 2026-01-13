@@ -10,12 +10,15 @@ import org.mapstruct.Named;
 import ru.practicum.openapi.model.ParticipationRequestDto;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Mapper(componentModel = "spring")
 public interface RequestMapper {
-    static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern(Values.DATE_TIME_PATTERN);
+    DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofPattern(Values.DATE_TIME_PATTERN)
+                    .withZone(ZoneId.of("UTC"));
 
     @Mapping(target = "created", source = "created", qualifiedByName = "toOffsetDateTime")
     ParticipationRequestDto toParticipationRequestDto(Request participationRequest);
@@ -26,6 +29,7 @@ public interface RequestMapper {
             return null;
         }
 
-        return FORMATTER.format(time);
+        ZonedDateTime utcTime = time.atZoneSameInstant(ZoneId.of("UTC"));
+        return FORMATTER.format(utcTime);
     }
 }
