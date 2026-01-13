@@ -238,6 +238,10 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.getEventByUserIdAndEventId(userId, eventId)
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
 
+        if (event.getState().equals(EventFullDto.StateEnum.PUBLISHED.toString())) {
+            throw new ForbiddenException(Exceptions.EXCEPTION_CANT_UPDATE_PUBLISHED);
+        }
+
         LocationEntity location = null;
 
         if (updateEventUserRequest.getLocation() != null) {

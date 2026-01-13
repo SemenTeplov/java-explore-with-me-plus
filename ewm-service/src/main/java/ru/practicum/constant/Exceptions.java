@@ -23,4 +23,5 @@ public class Exceptions {
     public static final String EXCEPTION_CONFLICT_CATEGORY = "Категория с именем %s уже существует";
     public static final String EXCEPTION_CANT_DELETE_CATEGORY = "Невозможно удалить категорию, так как с ней связаны события";
     public static final String EXCEPTION_CONFLICT_EMAIL = "Пользователь с email %s уже существует";
+    public static final String EXCEPTION_CANT_UPDATE_PUBLISHED = "Нельзя изменить опубликованное событие";
 }
