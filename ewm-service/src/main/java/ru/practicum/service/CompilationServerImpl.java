@@ -32,6 +32,7 @@ import ru.practicum.openapi.model.UpdateCompilationRequest;
 import ru.practicum.openapi.model.UserShortDto;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -91,7 +92,7 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
                 compilationMapper.compilationToCompilationDto(compilationRepository.getCompilation(compId)
                         .orElseThrow(() -> new NotFoundCompletion(Exceptions.NOT_FOUND_COMPLETION)));
 
-        List<Event> events = eventRepository.getEventsByCompilationIds(new Long[] {compId});
+        List<Event> events = eventRepository.getEventsByCompilationId(compId);
 
         List<CategoryDto> categories = getCategories(events.stream()
                 .map(Event::getCategory).distinct().toArray(Long[]::new));
@@ -119,7 +120,8 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
                         .map(i -> CompilationToEvents.builder().compilationId(compilationDto.getId()).eventId(i).build())
                         .toList());
 
-        List<Event> events = eventRepository.getEventsByCompilationIds(newCompilationDto.getEvents().toArray(new Long[0]));
+        Set<Long> eventIds = newCompilationDto.getEvents();
+        List<Event> events = eventRepository.getEventsByIds(eventIds.toArray(new Long[0]));
 
         List<CategoryDto> categories = getCategories(events.stream()
                 .map(Event::getCategory).distinct().toArray(Long[]::new));
@@ -151,7 +153,10 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
 
         CompilationDto compilationDto = compilationMapper.compilationToCompilationDto(compilation);
 
-        List<Event> events = eventRepository.getEventsByCompilationIds(new Long[] {compId});
+        List<Event> events = eventRepository.getEventsByCompilationId(compId);
+
+        log.debug("For compilation ID: {}, found events: {}", compId, events.size());
+        events.forEach(e -> log.debug("Event ID: {}", e.getId()));
 
         List<CategoryDto> categories = getCategories(events.stream()
                 .map(Event::getCategory).distinct().toArray(Long[]::new));
