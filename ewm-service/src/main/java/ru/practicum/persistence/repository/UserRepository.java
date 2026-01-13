@@ -21,4 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             WHERE id = ANY(:ids)
             """)
     List<User> getInitiatorByCompilationIds(@Param("ids") Long[] ids);
+
+    boolean existsByEmail(String email);
 }

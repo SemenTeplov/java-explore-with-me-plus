@@ -34,4 +34,7 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
             WHERE ce.compilation_id = ANY(:ids)
             """)
     List<Event> getEventsByCompilationIds(@Param("ids") Long[] ids);
+
+    @Query("SELECT COUNT(e) > 0 FROM Event e WHERE e.category = :categoryId")
+    boolean existsByCategoryId(@Param("categoryId") Long categoryId);
 }

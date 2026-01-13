@@ -108,8 +108,13 @@ public class EventServiceImpl implements EventService {
         List<Request> requests = requestRepository
                 .getRequestsByIds(eventRequestStatusRequest.getRequestIds().toArray(Long[]::new));
 
-        if (event.getParticipantLimit() < requests.size()) {
-            throw new LimitRequestsExceededException(Exceptions.EXCEPTION_LIMIT_EXCEEDED);
+        if (eventRequestStatusRequest.getStatus().equals(EventRequestStatusRequest.StatusEnum.CONFIRMED)) {
+            long confirmedRequests = requestRepository.countByEventIdAndStatus(eventId, StatusRequest.CONFIRMED.toString());
+            long newConfirmedCount = confirmedRequests + requests.size();
+
+            if (event.getParticipantLimit() > 0 && newConfirmedCount > event.getParticipantLimit()) {
+                throw new LimitRequestsExceededException(Exceptions.EXCEPTION_LIMIT_EXCEEDED);
+            }
         }
 
         List<ParticipationRequestDto> participationRequestDto =
@@ -160,8 +165,18 @@ public class EventServiceImpl implements EventService {
     public ResponseEntity<List<ParticipationRequestDto>> getEventParticipants(Long userId, Long eventId) {
         log.info(Messages.MESSAGE_GET_PARTICIPANTS, userId, eventId);
 
-        List<ParticipationRequestDto> result = requestRepository.getRequestsByUserIdAndEventId(userId, eventId)
-                .stream().map(eventMapper::requestToParticipationRequestDto).toList();
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_EVENT_NOT_FOUND));
+
+        if (!event.getInitiator().equals(userId)) {
+            throw new ForbiddenException(Exceptions.EXCEPTION_ONLY_INITIATOR);
+        }
+
+        List<Request> requests = requestRepository.findAllByEventId(eventId);
+
+        List<ParticipationRequestDto> result = requests.stream()
+                .map(eventMapper::requestToParticipationRequestDto)
+                .toList();
 
         return ResponseEntity.ok(result);
     }
@@ -237,6 +252,10 @@ public class EventServiceImpl implements EventService {
 
         Event event = eventRepository.getEventByUserIdAndEventId(userId, eventId)
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
+
+        if (event.getState().equals(EventFullDto.StateEnum.PUBLISHED.toString())) {
+            throw new ForbiddenException(Exceptions.EXCEPTION_CANT_UPDATE_PUBLISHED);
+        }
 
         LocationEntity location = null;
 

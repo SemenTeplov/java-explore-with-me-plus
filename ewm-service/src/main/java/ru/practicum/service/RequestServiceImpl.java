@@ -46,9 +46,9 @@ public class RequestServiceImpl implements RequestService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(String.format(Exceptions.EXCEPTION_NOT_FOUND_USER, userId)));
 
-//        if (!requestRepository.getRequestsByUserIdAndEventId(userId, eventId).isEmpty()) {
-//            throw new ForbiddenException(Exceptions.EXCEPTION_REQUEST_EXIST);
-//        }
+        if (!requestRepository.getRequestsByUserIdAndEventId(userId, eventId).isEmpty()) {
+            throw new ForbiddenException(Exceptions.EXCEPTION_REQUEST_EXIST);
+        }
 
         if (userId.equals(event.getInitiator())) {
             throw new ForbiddenException(Exceptions.EXCEPTION_REQUEST_INITIATOR_OWN);
