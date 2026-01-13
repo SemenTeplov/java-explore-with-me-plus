@@ -9,6 +9,7 @@ import main.java.ru.practicum.mapper.CategoryMapper;
 import main.java.ru.practicum.persistence.entity.Category;
 import main.java.ru.practicum.persistence.repository.CategoryRepository;
 
+import main.java.ru.practicum.persistence.repository.EventRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
-
+    private final EventRepository eventRepository;
     private final CategoryMapper categoryMapper;
 
     @Override
@@ -64,6 +65,10 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(Long categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new NotFoundException(String.format(Messages.MESSAGE_CATEGORY_NOT_FOUND, categoryId));
+        }
+
+        if (eventRepository.existsByCategoryId(categoryId)) {
+            throw new ForbiddenException(Exceptions.EXCEPTION_CANT_DELETE_CATEGORY);
         }
 
         categoryRepository.deleteById(categoryId);
