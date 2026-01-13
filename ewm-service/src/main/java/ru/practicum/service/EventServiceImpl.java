@@ -108,8 +108,13 @@ public class EventServiceImpl implements EventService {
         List<Request> requests = requestRepository
                 .getRequestsByIds(eventRequestStatusRequest.getRequestIds().toArray(Long[]::new));
 
-        if (event.getParticipantLimit() < requests.size()) {
-            throw new LimitRequestsExceededException(Exceptions.EXCEPTION_LIMIT_EXCEEDED);
+        if (eventRequestStatusRequest.getStatus().equals(EventRequestStatusRequest.StatusEnum.CONFIRMED)) {
+            long confirmedRequests = requestRepository.countByEventIdAndStatus(eventId, StatusRequest.CONFIRMED.toString());
+            long newConfirmedCount = confirmedRequests + requests.size();
+
+            if (event.getParticipantLimit() > 0 && newConfirmedCount > event.getParticipantLimit()) {
+                throw new LimitRequestsExceededException(Exceptions.EXCEPTION_LIMIT_EXCEEDED);
+            }
         }
 
         List<ParticipationRequestDto> participationRequestDto =
