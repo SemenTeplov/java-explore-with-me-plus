@@ -94,6 +94,8 @@
                                 <additionalModelTypeAnnotations>
                                     @lombok.Builder
                                 </additionalModelTypeAnnotations>
+                                <useBuilder>true</useBuilder>
+                                <serializeBigDecimalAsString>false</serializeBigDecimalAsString>
                                 <lombokBuilderDefault>true</lombokBuilderDefault>
                                 <modelNameSuffix>""</modelNameSuffix>
                             </configOptions>
