@@ -7,6 +7,7 @@ import main.java.ru.practicum.constant.Messages;
 
 import org.hibernate.exception.ConstraintViolationException;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -185,6 +186,21 @@ public class GlobalExceptionHandler {
                 .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
                 .reason(Messages.MESSAGE_LIMIT_EXCEEDED)
                 .message(Exceptions.EXCEPTION_LIMIT_EXCEEDED)
+                .status(ApiError.StatusEnum._409_CONFLICT)
+                .timestamp(LocalDateTime.now().toString())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiError> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        log.info(Exceptions.EXCEPTION_DATA_INTEGRITY_VIOLATION, e.getMessage());
+
+        ApiError error = ApiError.builder()
+                .errors(Arrays.stream(e.getStackTrace()).map(String::valueOf).toList())
+                .reason(Exceptions.EXCEPTION_DATA_INTEGRITY_VIOLATION)
+                .message(Exceptions.EXCEPTION_DATA_INTEGRITY_VIOLATION)
                 .status(ApiError.StatusEnum._409_CONFLICT)
                 .timestamp(LocalDateTime.now().toString())
                 .build();
