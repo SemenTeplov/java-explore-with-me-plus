@@ -3,6 +3,7 @@ package main.java.ru.practicum.service;
 import lombok.RequiredArgsConstructor;
 
 import main.java.ru.practicum.constant.Exceptions;
+import main.java.ru.practicum.exception.ForbiddenException;
 import main.java.ru.practicum.mapper.UserMapper;
 import main.java.ru.practicum.persistence.entity.User;
 import main.java.ru.practicum.dto.GetUsersRequest;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto addUser(NewUserRequest newUserRequest) {
+        if (userRepository.existsByEmail(newUserRequest.getEmail())) {
+            throw new ForbiddenException(String.format(Exceptions.EXCEPTION_CONFLICT_EMAIL, newUserRequest.getEmail()));
+        }
         return userMapper.toUserDto(userRepository.save(userMapper.toUser(newUserRequest)));
     }
 
