@@ -175,6 +175,7 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
                 .orElseThrow(() -> new NotFoundCompletion(Exceptions.NOT_FOUND_COMPLETION));
 
         compilationToEventsRepository.deleteCompilationToEventsByIdsCompilation(compilation.getId());
+        compilationRepository.deleteById(compId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
