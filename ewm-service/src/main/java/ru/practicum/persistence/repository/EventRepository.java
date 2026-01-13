@@ -28,11 +28,10 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
     List<Event> getEventsUser(@Param("userId") Long userId, @Param("from") Integer from, @Param("size") Integer size);
 
     @Query(nativeQuery = true, value = """
-            SELECT e.*
-            FROM events e
-            JOIN compilation_to_events ce ON ce.event_id = e.id
-            WHERE ce.compilation_id = ANY(:ids)
-            """)
+        SELECT e.*
+        FROM events e
+        WHERE e.id = ANY(:ids)
+        """)
     List<Event> getEventsByCompilationIds(@Param("ids") Long[] ids);
 
     @Query("SELECT COUNT(e) > 0 FROM Event e WHERE e.category = :categoryId")
