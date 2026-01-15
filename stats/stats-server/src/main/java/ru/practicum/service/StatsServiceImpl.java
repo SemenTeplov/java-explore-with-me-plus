@@ -37,10 +37,9 @@ public class StatsServiceImpl implements StatsService {
         }
 
         if (uris != null) {
-            return statsRepository.getStats(start, end, uris.toArray(new String[0]), unique);
-        } else {
-            return statsRepository.getStatsWithoutUris(start, end, unique);
+            return statsRepository.getStats(start, end, uris.toArray(String[]::new), unique);
         }
 
+        return statsRepository.getStatsWithoutUris(start, end, unique);
     }
 }

@@ -8,7 +8,16 @@ import org.springframework.web.client.RestClient;
 import java.time.LocalDateTime;
 
 public class EwmClient {
-    public static void send(String uri) {
+    public static void sendEvent(String uri, Long id) {
+        RestClient client = RestClient.create();
+
+        client.post().uri(Values.ADDRESS_STATS_SERVER)
+                .body(new HitEventDTO(Values.APPLICATION, uri + id, Values.EWM_IP, LocalDateTime.now()))
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    public static void sendEvents(String uri) {
         RestClient client = RestClient.create();
 
         client.post().uri(Values.ADDRESS_STATS_SERVER)

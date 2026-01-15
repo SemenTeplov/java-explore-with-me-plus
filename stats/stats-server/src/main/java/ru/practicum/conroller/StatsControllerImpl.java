@@ -8,6 +8,7 @@ import dto.EndpointHitDto;
 import dto.ViewStats;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

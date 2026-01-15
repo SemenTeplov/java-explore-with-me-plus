@@ -159,7 +159,7 @@ public class EventServiceImpl implements EventService {
         LocationEntity location = locationRepository.findById(event.getLocation())
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
 
-        EwmClient.send(Values.EVENT_GET_URI);
+        EwmClient.sendEvent(Values.EVENT_GET_URI, id);
 
         return ResponseEntity.ok(getEventFullDto(event, location));
     }
@@ -206,6 +206,8 @@ public class EventServiceImpl implements EventService {
                 .stream()
                 .map(this::getEventShortDto)
                 .toList();
+
+        EwmClient.sendEvents(Values.EVENTS_GET_URI);
 
         return ResponseEntity.ok(list);
     }
