@@ -25,8 +25,8 @@ import main.java.ru.practicum.persistence.repository.RequestRepository;
 import main.java.ru.practicum.persistence.repository.UserRepository;
 import main.java.ru.practicum.persistence.status.StatusRequest;
 import main.java.ru.practicum.specification.EventSpecification;
-
 import main.java.ru.practicum.util.EwmClient;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -248,11 +248,6 @@ public class EventServiceImpl implements EventService {
                                                     UpdateEventUserRequest updateEventUserRequest) {
         log.info(Messages.MESSAGE_UPDATE_EVENT);
 
-//        if (updateEventUserRequest.getParticipantLimit() != null &&
-//                updateEventUserRequest.getParticipantLimit() < 0) {
-//            throw new ValidationException("Поле participantLimit не может быть отрицательным");
-//        }
-
         checkDate(updateEventUserRequest.getEventDate());
 
         Event event = eventRepository.getEventByUserIdAndEventId(userId, eventId)
@@ -388,17 +383,14 @@ public class EventServiceImpl implements EventService {
         if (newEventDto.getAnnotation() != null && newEventDto.getAnnotation().trim().isEmpty()) {
             throw new ValidationException(Exceptions.EXCEPTION_FIELD_ANNOTATION_NOT_HAS_SPACE);
         }
+
         if (newEventDto.getDescription() != null && newEventDto.getDescription().trim().isEmpty()) {
             throw new ValidationException(Exceptions.EXCEPTION_FIELD_DESCRIPTION_NOT_HAS_SPACE);
         }
+
         if (newEventDto.getTitle() != null && newEventDto.getTitle().trim().isEmpty()) {
             throw new ValidationException(Exceptions.EXCEPTION_FIELD_TITLE_NOT_HAS_SPACE);
         }
-//        if (newEventDto.getParticipantLimit() != null) {
-//            if (newEventDto.getParticipantLimit() < 0) {
-//                throw new ValidationException("Поле participantLimit не может быть отрицательным");
-//            }
-//        }
     }
 
     private void validateDateRange(String rangeStart, String rangeEnd) {
