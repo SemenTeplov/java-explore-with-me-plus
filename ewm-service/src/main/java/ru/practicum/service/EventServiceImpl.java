@@ -8,6 +8,7 @@ import main.java.ru.practicum.constant.Messages;
 import main.java.ru.practicum.constant.Values;
 import main.java.ru.practicum.dto.GetEventsForAdminRequest;
 import main.java.ru.practicum.dto.GetEventsRequest;
+import main.java.ru.practicum.dto.HitEventDTO;
 import main.java.ru.practicum.exception.*;
 import main.java.ru.practicum.mapper.CategoryMapper;
 import main.java.ru.practicum.mapper.EventMapper;
@@ -31,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import org.springframework.web.client.RestClient;
 import ru.practicum.openapi.model.EventFullDto;
 import ru.practicum.openapi.model.EventRequestStatusRequest;
 import ru.practicum.openapi.model.EventRequestStatusUpdateResult;
@@ -142,6 +144,13 @@ public class EventServiceImpl implements EventService {
     @Override
     public ResponseEntity<EventFullDto> getEvent(Long id) {
         log.info(Messages.MESSAGE_GET_EVENT_BY_ID, id);
+
+        RestClient client = RestClient.create();
+
+        client.post().uri("http://stats-server:9090")
+                .body(new HitEventDTO("Event", "/events/{id}", "8080", LocalDateTime.now()))
+                .retrieve()
+                .toBodilessEntity();
 
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
