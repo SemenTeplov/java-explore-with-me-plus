@@ -112,6 +112,10 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
     public ResponseEntity<CompilationDto> saveCompilation(NewCompilationDto newCompilationDto) {
         log.info(Messages.SAVE_COMPILATION, newCompilationDto);
 
+        if (newCompilationDto.getTitle().isBlank()) {
+            throw new IllegalArgumentException();
+        }
+
         CompilationDto compilationDto = compilationMapper.compilationToCompilationDto(compilationRepository
                 .save(compilationMapper.newCompilationDtoToCompilation(newCompilationDto)));
 

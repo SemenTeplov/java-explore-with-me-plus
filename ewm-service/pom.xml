@@ -88,12 +88,8 @@
                                 <delegatePattern>true</delegatePattern>
                                 <useTags>true</useTags>
                                 <skipDefaultInterface>true</skipDefaultInterface>
-                                <additionalModelTypeAnnotations>
-                                    @lombok.AllArgsConstructor
-                                </additionalModelTypeAnnotations>
-                                <additionalModelTypeAnnotations>
-                                    @lombok.Builder
-                                </additionalModelTypeAnnotations>
+                                <generateConstructorWithAllArgs>true</generateConstructorWithAllArgs>
+                                <generateBuilders>true</generateBuilders>
                                 <useBuilder>true</useBuilder>
                                 <serializeBigDecimalAsString>false</serializeBigDecimalAsString>
                                 <lombokBuilderDefault>true</lombokBuilderDefault>
