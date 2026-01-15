@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient;
 import java.time.LocalDateTime;
 
 public class EwmClient {
-    static public void send(String uri) {
+    public static void send(String uri) {
         RestClient client = RestClient.create();
 
         client.post().uri(Values.ADDRESS_STATS_SERVER)
