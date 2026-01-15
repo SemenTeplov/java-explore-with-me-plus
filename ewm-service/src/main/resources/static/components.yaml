@@ -229,7 +229,7 @@ components:
         participantLimit:
           type: integer
           format: int32
-          minimum: 0
+          minimum: 1
           example: 10
           default: 0
           description: Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
@@ -358,6 +358,7 @@ components:
     UpdateEventUserRequest:
       type: object
       description: Данные для изменения информации о событии. Если поле в запросе не указано (равно null) - значит изменение этих данных не треубется.
+        - participantLimit
       properties:
         annotation:
           type: string
@@ -390,7 +391,7 @@ components:
         participantLimit:
           type: integer
           format: int32
-          minimum: 0
+          minimum: 1
           example: 7
           description: Новый лимит пользователей
         requestModeration:

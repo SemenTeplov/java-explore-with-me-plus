@@ -8,7 +8,6 @@ import main.java.ru.practicum.constant.Messages;
 import main.java.ru.practicum.constant.Values;
 import main.java.ru.practicum.dto.GetEventsForAdminRequest;
 import main.java.ru.practicum.dto.GetEventsRequest;
-import main.java.ru.practicum.dto.HitEventDTO;
 import main.java.ru.practicum.exception.*;
 import main.java.ru.practicum.mapper.CategoryMapper;
 import main.java.ru.practicum.mapper.EventMapper;
@@ -27,12 +26,12 @@ import main.java.ru.practicum.persistence.repository.UserRepository;
 import main.java.ru.practicum.persistence.status.StatusRequest;
 import main.java.ru.practicum.specification.EventSpecification;
 
+import main.java.ru.practicum.util.EwmClient;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import org.springframework.web.client.RestClient;
 import ru.practicum.openapi.model.EventFullDto;
 import ru.practicum.openapi.model.EventRequestStatusRequest;
 import ru.practicum.openapi.model.EventRequestStatusUpdateResult;
@@ -145,13 +144,6 @@ public class EventServiceImpl implements EventService {
     public ResponseEntity<EventFullDto> getEvent(Long id) {
         log.info(Messages.MESSAGE_GET_EVENT_BY_ID, id);
 
-        RestClient client = RestClient.create();
-
-        client.post().uri("http://stats-server:9090")
-                .body(new HitEventDTO("Event", "/events/{id}", "8080", LocalDateTime.now()))
-                .retrieve()
-                .toBodilessEntity();
-
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
 
@@ -161,11 +153,13 @@ public class EventServiceImpl implements EventService {
         }
 
         if (!event.getState().equals(EventFullDto.StateEnum.PUBLISHED.toString())) {
-            throw new NotFoundException("Событие не найдено или недоступно");
+            throw new NotFoundException(Exceptions.EXCEPTION_NOT_PUBLISHED);
         }
 
         LocationEntity location = locationRepository.findById(event.getLocation())
                 .orElseThrow(() -> new NotFoundException(Exceptions.EXCEPTION_NOT_FOUND));
+
+        EwmClient.send(Values.EVENT_GET_URI);
 
         return ResponseEntity.ok(getEventFullDto(event, location));
     }
@@ -253,10 +247,12 @@ public class EventServiceImpl implements EventService {
     public ResponseEntity<EventFullDto> updateEvent(Long userId, Long eventId,
                                                     UpdateEventUserRequest updateEventUserRequest) {
         log.info(Messages.MESSAGE_UPDATE_EVENT);
-        if (updateEventUserRequest.getParticipantLimit() != null &&
-                updateEventUserRequest.getParticipantLimit() < 0) {
-            throw new ValidationException("Поле participantLimit не может быть отрицательным");
-        }
+
+//        if (updateEventUserRequest.getParticipantLimit() != null &&
+//                updateEventUserRequest.getParticipantLimit() < 0) {
+//            throw new ValidationException("Поле participantLimit не может быть отрицательным");
+//        }
+
         checkDate(updateEventUserRequest.getEventDate());
 
         Event event = eventRepository.getEventByUserIdAndEventId(userId, eventId)
@@ -390,19 +386,19 @@ public class EventServiceImpl implements EventService {
 
     private void validateEventFields(NewEventDto newEventDto) {
         if (newEventDto.getAnnotation() != null && newEventDto.getAnnotation().trim().isEmpty()) {
-            throw new ValidationException("Поле annotation не может состоять только из пробелов");
+            throw new ValidationException(Exceptions.EXCEPTION_FIELD_ANNOTATION_NOT_HAS_SPACE);
         }
         if (newEventDto.getDescription() != null && newEventDto.getDescription().trim().isEmpty()) {
-            throw new ValidationException("Поле description не может состоять только из пробелов");
+            throw new ValidationException(Exceptions.EXCEPTION_FIELD_DESCRIPTION_NOT_HAS_SPACE);
         }
         if (newEventDto.getTitle() != null && newEventDto.getTitle().trim().isEmpty()) {
-            throw new ValidationException("Поле title не может состоять только из пробелов");
+            throw new ValidationException(Exceptions.EXCEPTION_FIELD_TITLE_NOT_HAS_SPACE);
         }
-        if (newEventDto.getParticipantLimit() != null) {
-            if (newEventDto.getParticipantLimit() < 0) {
-                throw new ValidationException("Поле participantLimit не может быть отрицательным");
-            }
-        }
+//        if (newEventDto.getParticipantLimit() != null) {
+//            if (newEventDto.getParticipantLimit() < 0) {
+//                throw new ValidationException("Поле participantLimit не может быть отрицательным");
+//            }
+//        }
     }
 
     private void validateDateRange(String rangeStart, String rangeEnd) {
@@ -413,7 +409,7 @@ public class EventServiceImpl implements EventService {
             LocalDateTime end = LocalDateTime.parse(rangeEnd, formatter);
 
             if (start.isAfter(end)) {
-                throw new ValidationException("Дата начала диапазона не может быть позже даты окончания");
+                throw new ValidationException(Exceptions.EXCEPTION_WRONG_DATE_RANGE);
             }
         }
     }

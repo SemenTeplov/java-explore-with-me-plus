@@ -26,4 +26,9 @@ public class Exceptions {
     public static final String EXCEPTION_CANT_UPDATE_PUBLISHED = "Нельзя изменить опубликованное событие";
     public static final String EXCEPTION_ONLY_INITIATOR = "Только инициатор события может просматривать заявки на участие";
     public static final String EXCEPTION_DATA_INTEGRITY_VIOLATION = "Нарушена целостность данных";
+    public static final String EXCEPTION_NOT_PUBLISHED = "Событие не найдено или недоступно";
+    public static final String EXCEPTION_WRONG_DATE_RANGE = "Дата начала диапазона не может быть позже даты окончания";
+    public static final String EXCEPTION_FIELD_ANNOTATION_NOT_HAS_SPACE = "Поле annotation не может состоять только из пробелов";
+    public static final String EXCEPTION_FIELD_DESCRIPTION_NOT_HAS_SPACE = "Поле description не может состоять только из пробелов";
+    public static final String EXCEPTION_FIELD_TITLE_NOT_HAS_SPACE = "Поле title не может состоять только из пробелов";
 }
