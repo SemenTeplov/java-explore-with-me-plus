@@ -11,11 +11,9 @@ import main.java.ru.practicum.mapper.CompilationMapper;
 import main.java.ru.practicum.mapper.EventMapper;
 import main.java.ru.practicum.mapper.UserMapper;
 import main.java.ru.practicum.persistence.entity.Compilation;
-import main.java.ru.practicum.persistence.entity.CompilationToEvents;
 import main.java.ru.practicum.persistence.entity.Event;
 import main.java.ru.practicum.persistence.repository.CategoryRepository;
 import main.java.ru.practicum.persistence.repository.CompilationRepository;
-import main.java.ru.practicum.persistence.repository.CompilationToEventsRepository;
 import main.java.ru.practicum.persistence.repository.EventRepository;
 import main.java.ru.practicum.persistence.repository.UserRepository;
 
@@ -31,8 +29,9 @@ import ru.practicum.openapi.model.NewCompilationDto;
 import ru.practicum.openapi.model.UpdateCompilationRequest;
 import ru.practicum.openapi.model.UserShortDto;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -46,8 +45,6 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
 
     private final UserRepository initiatorRepository;
 
-    private final CompilationToEventsRepository compilationToEventsRepository;
-
     private final CompilationMapper compilationMapper;
 
     private final EventMapper eventMapper;
@@ -60,25 +57,14 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
     public ResponseEntity<List<CompilationDto>> getCompilations(Boolean pinned, Integer from, Integer size) {
         log.info(Messages.GET_COMPILATIONS);
 
-        List<CompilationDto> list = compilationRepository.getCompilations(pinned, from, size).stream()
+        List<Compilation> compilations = compilationRepository.getCompilations(pinned, from, size);
+        List<CompilationDto> list = compilations.stream()
                 .map(compilationMapper::compilationToCompilationDto)
                 .toList();
 
-        if (!list.isEmpty()) {
-            List<Event> events = eventRepository.getEventsByCompilationIds(list.stream()
-                    .map(CompilationDto::getId).distinct().toArray(Long[]::new));
-            List<CategoryDto> categories = getCategories(events.stream()
-                    .map(Event::getCategory).distinct().toArray(Long[]::new));
-            List<UserShortDto> users = getUsers(events.stream()
-                    .map(Event::getInitiator).distinct().toArray(Long[]::new));
-            List<CompilationToEvents> compilationToEvents =
-                    compilationToEventsRepository.getCompilationToEventsByIdsCompilation(list.stream()
-                            .map(CompilationDto::getId)
-                            .distinct()
-                            .toArray(Long[]::new));
-
-            list.forEach(item -> item
-                    .events(completionCompilationDto(item, events, compilationToEvents, categories, users)));
+        if (!compilations.isEmpty()) {
+            list.forEach(item -> item.events(completionCompilationDto(compilations.stream()
+                    .flatMap(c -> c.getEvents().stream()).toList())));
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(list);
@@ -88,21 +74,10 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
     public ResponseEntity<CompilationDto> getCompilation(Long compId) {
         log.info(Messages.GET_COMPILATION, compId);
 
-        CompilationDto compilationDto =
-                compilationMapper.compilationToCompilationDto(compilationRepository.getCompilation(compId)
-                        .orElseThrow(() -> new NotFoundCompletion(Exceptions.NOT_FOUND_COMPLETION)));
-
-        List<Event> events = eventRepository.getEventsByCompilationId(compId);
-
-        List<CategoryDto> categories = getCategories(events.stream()
-                .map(Event::getCategory).distinct().toArray(Long[]::new));
-        List<UserShortDto> users = getUsers(events.stream()
-                .map(Event::getInitiator).distinct().toArray(Long[]::new));
-        List<CompilationToEvents> compilationToEvents =
-                compilationToEventsRepository.getCompilationToEventsByIdsCompilation(new Long[] {compilationDto.getId()});
-
-        compilationDto.setEvents(completionCompilationDto(compilationDto, events,
-                compilationToEvents, categories, users));
+        Compilation compilation = compilationRepository.getCompilation(compId)
+                .orElseThrow(() -> new NotFoundCompletion(Exceptions.NOT_FOUND_COMPLETION));
+        CompilationDto compilationDto = compilationMapper.compilationToCompilationDto(compilation);
+        compilationDto.setEvents(completionCompilationDto(compilation.getEvents()));
 
         return ResponseEntity.status(HttpStatus.OK).body(compilationDto);
     }
@@ -116,24 +91,13 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
             throw new IllegalArgumentException();
         }
 
-        CompilationDto compilationDto = compilationMapper.compilationToCompilationDto(compilationRepository
-                .save(compilationMapper.newCompilationDtoToCompilation(newCompilationDto)));
+        Compilation compilation = compilationMapper.newCompilationDtoToCompilation(newCompilationDto);
+        compilation.setEvents(eventRepository.getEventsByIds(newCompilationDto.getEvents().toArray(Long[]::new))
+                .stream().collect(Collectors.toSet()));
+        compilation = compilationRepository.save(compilation);
 
-        List<CompilationToEvents> compilationToEvents = compilationToEventsRepository
-                .saveAll(newCompilationDto.getEvents().stream()
-                        .map(i -> CompilationToEvents.builder().compilationId(compilationDto.getId()).eventId(i).build())
-                        .toList());
-
-        Set<Long> eventIds = newCompilationDto.getEvents();
-        List<Event> events = eventRepository.getEventsByIds(eventIds.toArray(new Long[0]));
-
-        List<CategoryDto> categories = getCategories(events.stream()
-                .map(Event::getCategory).distinct().toArray(Long[]::new));
-        List<UserShortDto> users = getUsers(events.stream()
-                .map(Event::getInitiator).distinct().toArray(Long[]::new));
-
-        compilationDto.setEvents(completionCompilationDto(compilationDto, events,
-                compilationToEvents, categories, users));
+        CompilationDto compilationDto = compilationMapper.compilationToCompilationDto(compilation);
+        compilationDto.setEvents(completionCompilationDto(compilation.getEvents()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(compilationDto);
     }
@@ -145,32 +109,10 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
 
         Compilation compilation = compilationRepository.getCompilation(compId)
                 .orElseThrow(() -> new NotFoundCompletion(Exceptions.NOT_FOUND_COMPLETION));
-
-        compilationToEventsRepository.deleteCompilationToEventsByIdsCompilation(compId);
-        compilationToEventsRepository.saveAll(updateCompilationRequest.getEvents().stream()
-                .map(cr -> CompilationToEvents.builder().compilationId(compId).eventId(cr).build())
-                .toList());
-
         compilationMapper.updateCompilationRequestToCompilation(compilation, updateCompilationRequest);
 
-        compilationRepository.save(compilation);
-
         CompilationDto compilationDto = compilationMapper.compilationToCompilationDto(compilation);
-
-        List<Event> events = eventRepository.getEventsByCompilationId(compId);
-
-        log.debug("For compilation ID: {}, found events: {}", compId, events.size());
-        events.forEach(e -> log.debug("Event ID: {}", e.getId()));
-
-        List<CategoryDto> categories = getCategories(events.stream()
-                .map(Event::getCategory).distinct().toArray(Long[]::new));
-        List<UserShortDto> users = getUsers(events.stream()
-                .map(Event::getInitiator).distinct().toArray(Long[]::new));
-        List<CompilationToEvents> compilationToEvents =
-                compilationToEventsRepository.getCompilationToEventsByIdsCompilation(new Long[] {compilationDto.getId()});
-
-        compilationDto.setEvents(completionCompilationDto(compilationDto, events,
-                compilationToEvents, categories, users));
+        compilationDto.setEvents(completionCompilationDto(compilation.getEvents()));
 
         return ResponseEntity.status(HttpStatus.OK).body(compilationDto);
     }
@@ -180,10 +122,6 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
     public ResponseEntity<Void> deleteCompilation(Long compId) {
         log.info(Messages.DELETE_COMPILATION, compId);
 
-        Compilation compilation = compilationRepository.getCompilation(compId)
-                .orElseThrow(() -> new NotFoundCompletion(Exceptions.NOT_FOUND_COMPLETION));
-
-        compilationToEventsRepository.deleteCompilationToEventsByIdsCompilation(compilation.getId());
         compilationRepository.deleteById(compId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -201,17 +139,14 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
                 .toList();
     }
 
-    private List<EventShortDto> completionCompilationDto(CompilationDto compilationDto,
-                                                         List<Event> events,
-                                                         List<CompilationToEvents> compilationToEvents,
-                                                         List<CategoryDto> categories,
-                                                         List<UserShortDto> users) {
-        return events.stream()
-                .filter(e -> compilationToEvents.stream()
-                        .anyMatch(ce -> ce.getCompilationId()
-                                .equals(compilationDto.getId()) && ce.getEventId().equals(e.getId())))
-                .map(e -> eventMapper.eventToEventShortDto(e)
-                        .category(categories.stream().filter(c -> c.getId()
+    private List<EventShortDto> completionCompilationDto(Collection<Event> events) {
+        List<CategoryDto> categories = getCategories(events.stream()
+                .map(Event::getCategory).distinct().toArray(Long[]::new));
+        List<UserShortDto> users = getUsers(events.stream()
+                .map(Event::getInitiator).distinct().toArray(Long[]::new));
+
+        return events.stream().map(e -> eventMapper.eventToEventShortDto(e)
+                        .category(categories.stream().filter(ct -> ct.getId()
                                 .equals(e.getCategory())).findFirst().get())
                         .initiator(users.stream().filter(u -> u.getId()
                                 .equals(e.getInitiator())).findFirst().get()))

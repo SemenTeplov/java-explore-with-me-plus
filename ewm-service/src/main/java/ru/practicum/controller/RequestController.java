@@ -22,7 +22,7 @@ public class RequestController implements RequestApi {
     private final RequestService requestService;
 
     @Override
-    public ResponseEntity<ParticipationRequestDto> _addParticipationRequest(Long userId, Long eventId) {
+    public ResponseEntity<ParticipationRequestDto> addParticipationRequest(Long userId, Long eventId) {
         ParticipationRequestDto participationRequestDto = requestService.addRequest(userId, eventId);
         log.info(Messages.MESSAGE_ADDED_REQUEST, participationRequestDto.getId(), participationRequestDto.getStatus());
 
@@ -30,7 +30,7 @@ public class RequestController implements RequestApi {
     }
 
     @Override
-    public ResponseEntity<ParticipationRequestDto> _cancelRequest(Long userId, Long requestId) {
+    public ResponseEntity<ParticipationRequestDto> cancelRequest(Long userId, Long requestId) {
         //requestService.cancelRequest(userId, requestId); <- два вызова в одном методе -_-
         log.info(Messages.MESSAGE_CANCEL_REQUEST, requestId, userId);
 
@@ -38,7 +38,7 @@ public class RequestController implements RequestApi {
     }
 
     @Override
-    public ResponseEntity<List<ParticipationRequestDto>> _getUserRequests(Long userId) {
+    public ResponseEntity<List<ParticipationRequestDto>> getUserRequests(Long userId) {
         List<ParticipationRequestDto> requests = requestService.getRequestsByUser(userId);
         log.info(Messages.MESSAGE_GET_REQUESTS, requests.size(), userId);
 

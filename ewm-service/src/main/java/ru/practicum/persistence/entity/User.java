@@ -28,6 +28,5 @@ public class User {
 
     String name;
 
-    @Email
     String email;
 }

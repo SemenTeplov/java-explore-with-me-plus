@@ -23,7 +23,7 @@ public class CategoryController implements CategoryApi {
     private final CategoryService categoryService;
 
     @Override
-    public ResponseEntity<CategoryDto> _addCategory(NewCategoryDto newCategoryDto) {
+    public ResponseEntity<CategoryDto> addCategory(NewCategoryDto newCategoryDto) {
         log.info(Messages.MESSAGE_ADD_CATEGORIES, newCategoryDto);
         CategoryDto categoryDto = categoryService.addCategory(newCategoryDto);
 
@@ -31,7 +31,7 @@ public class CategoryController implements CategoryApi {
     }
 
     @Override
-    public ResponseEntity<Void> _deleteCategory(Long catId) {
+    public ResponseEntity<Void> deleteCategory(Long catId) {
         log.info(Messages.MESSAGE_DELETE_CATEGORIES, catId);
         categoryService.deleteCategory(catId);
 
@@ -39,7 +39,7 @@ public class CategoryController implements CategoryApi {
     }
 
     @Override
-    public ResponseEntity<List<CategoryDto>> _getCategories(Integer from, Integer size) {
+    public ResponseEntity<List<CategoryDto>> getCategories(Integer from, Integer size) {
         log.info(Messages.MESSAGE_GET_CATEGORIES);
         List<CategoryDto> categories = categoryService.getCategories(from, size);
 
@@ -47,7 +47,7 @@ public class CategoryController implements CategoryApi {
     }
 
     @Override
-    public ResponseEntity<CategoryDto> _getCategory(Long catId) {
+    public ResponseEntity<CategoryDto> getCategory(Long catId) {
         log.info(Messages.MESSAGE_GET_CATEGORY, catId);
         CategoryDto category = categoryService.getCategoryById(catId);
 
@@ -55,7 +55,7 @@ public class CategoryController implements CategoryApi {
     }
 
     @Override
-    public ResponseEntity<CategoryDto> _updateCategory(Long catId, CategoryDto categoryDto) {
+    public ResponseEntity<CategoryDto> updateCategory(Long catId, CategoryDto categoryDto) {
         log.info(Messages.MESSAGE_UPDATE_CATEGORY, catId, categoryDto);
         CategoryDto updatedCategory = categoryService.updateCategory(catId, categoryDto);
 

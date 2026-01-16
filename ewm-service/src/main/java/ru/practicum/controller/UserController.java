@@ -24,7 +24,7 @@ public class UserController implements UserApi {
     private final UserService userService;
 
     @Override
-    public ResponseEntity<Void> _deleteUser(Long userId) {
+    public ResponseEntity<Void> deleteUser(Long userId) {
         log.info(Messages.MESSAGE_DELETE_USER, userId);
         userService.deleteUser(userId);
 
@@ -32,7 +32,7 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<List<UserDto>> _getUsers(
+    public ResponseEntity<List<UserDto>> getUsers(
             List<Long> ids,
             Integer from,
             Integer size) {
@@ -46,7 +46,7 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<UserDto> _registerUser(NewUserRequest newUserRequest) {
+    public ResponseEntity<UserDto> registerUser(NewUserRequest newUserRequest) {
         log.info(Messages.MESSAGE_REGISTER_USER, newUserRequest);
         UserDto userDto = userService.addUser(newUserRequest);
 

@@ -27,33 +27,33 @@ public class EventController implements EventApi {
     private final EventService eventService;
 
     @Override
-    public ResponseEntity<EventFullDto> _addEvent(Long userId, NewEventDto newEventDto) {
+    public ResponseEntity<EventFullDto> addEvent(Long userId, NewEventDto newEventDto) {
         return eventService.addEvent(userId, newEventDto);
     }
 
     @Override
-    public ResponseEntity<EventRequestStatusUpdateResult> _changeRequestStatus(Long userId, Long eventId,
+    public ResponseEntity<EventRequestStatusUpdateResult> changeRequestStatus(Long userId, Long eventId,
                                                                                EventRequestStatusRequest eventRequestStatusRequest) {
         return eventService.changeRequestStatus(userId, eventId, eventRequestStatusRequest);
     }
 
     @Override
-    public ResponseEntity<EventFullDto> _getEvent(Long id) {
+    public ResponseEntity<EventFullDto> getEvent(Long id) {
         return eventService.getEvent(id);
     }
 
     @Override
-    public ResponseEntity<List<ParticipationRequestDto>> _getEventParticipants(Long userId, Long eventId) {
+    public ResponseEntity<List<ParticipationRequestDto>> getEventParticipants(Long userId, Long eventId) {
         return eventService.getEventParticipants(userId, eventId);
     }
 
     @Override
-    public ResponseEntity<EventFullDto> _getEventUser(Long userId, Long eventId) {
+    public ResponseEntity<EventFullDto> getEventUser(Long userId, Long eventId) {
         return eventService.getEventUser(userId, eventId);
     }
 
     @Override
-    public ResponseEntity<List<EventShortDto>> _getEvents(String text, List<Long> categories, Boolean paid,
+    public ResponseEntity<List<EventShortDto>> getEvents(String text, List<Long> categories, Boolean paid,
                                                           String rangeStart, String rangeEnd, Boolean onlyAvailable,
                                                           String sort, Integer from, Integer size) {
         return eventService.getEvents(GetEventsRequest.builder()
@@ -70,7 +70,7 @@ public class EventController implements EventApi {
     }
 
     @Override
-    public ResponseEntity<List<EventFullDto>> _getEventsAdmin(List<Long> users, List<String> states, List<Long> categories,
+    public ResponseEntity<List<EventFullDto>> getEventsAdmin(List<Long> users, List<String> states, List<Long> categories,
                                                               String rangeStart, String rangeEnd, Integer from,
                                                               Integer size) {
         return eventService.getEventsAdmin(GetEventsForAdminRequest.builder()
@@ -85,18 +85,18 @@ public class EventController implements EventApi {
     }
 
     @Override
-    public ResponseEntity<List<EventShortDto>> _getEventsUser(Long userId, Integer from, Integer size) {
+    public ResponseEntity<List<EventShortDto>> getEventsUser(Long userId, Integer from, Integer size) {
         return eventService.getEventsUser(userId, from, size);
     }
 
     @Override
-    public ResponseEntity<EventFullDto> _updateEvent(Long userId, Long eventId,
+    public ResponseEntity<EventFullDto> updateEvent(Long userId, Long eventId,
                                                      UpdateEventUserRequest updateEventUserRequest) {
         return eventService.updateEvent(userId, eventId, updateEventUserRequest);
     }
 
     @Override
-    public ResponseEntity<EventFullDto> _updateEventAdmin(Long eventId,
+    public ResponseEntity<EventFullDto> updateEventAdmin(Long eventId,
                                                           UpdateEventAdminRequest updateEventAdminRequest) {
         return eventService.updateEventAdmin(eventId, updateEventAdminRequest);
     }

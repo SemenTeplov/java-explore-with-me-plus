@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HitEventDTO {
+public class HitEventRequest {
     @NotBlank
     String app;
 

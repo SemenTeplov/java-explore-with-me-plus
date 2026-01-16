@@ -20,27 +20,27 @@ public class CompilationController implements CompilationApi {
     private final CompilationServer  compilationServer;
 
     @Override
-    public ResponseEntity<Void> _deleteCompilation(Long compId) {
+    public ResponseEntity<Void> deleteCompilation(Long compId) {
         return compilationServer.deleteCompilation(compId);
     }
 
     @Override
-    public ResponseEntity<CompilationDto> _getCompilation(Long compId) {
+    public ResponseEntity<CompilationDto> getCompilation(Long compId) {
         return compilationServer.getCompilation(compId);
     }
 
     @Override
-    public ResponseEntity<List<CompilationDto>> _getCompilations(Boolean pinned, Integer from, Integer size) {
+    public ResponseEntity<List<CompilationDto>> getCompilations(Boolean pinned, Integer from, Integer size) {
         return compilationServer.getCompilations(pinned, from, size);
     }
 
     @Override
-    public ResponseEntity<CompilationDto> _saveCompilation(NewCompilationDto newCompilationDto) {
+    public ResponseEntity<CompilationDto> saveCompilation(NewCompilationDto newCompilationDto) {
         return compilationServer.saveCompilation(newCompilationDto);
     }
 
     @Override
-    public ResponseEntity<CompilationDto> _updateCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
+    public ResponseEntity<CompilationDto> updateCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
         return compilationServer.updateCompilation(compId, updateCompilationRequest);
     }
 }
