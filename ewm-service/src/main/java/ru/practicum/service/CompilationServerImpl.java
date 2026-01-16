@@ -30,6 +30,7 @@ import ru.practicum.openapi.model.UpdateCompilationRequest;
 import ru.practicum.openapi.model.UserShortDto;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,13 +60,8 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
 
         List<Compilation> compilations = compilationRepository.getCompilations(pinned, from, size);
         List<CompilationDto> list = compilations.stream()
-                .map(compilationMapper::compilationToCompilationDto)
-                .toList();
-
-        if (!compilations.isEmpty()) {
-            list.forEach(item -> item.events(completionCompilationDto(compilations.stream()
-                    .flatMap(c -> c.getEvents().stream()).toList())));
-        }
+                .map(c -> compilationMapper.compilationToCompilationDto(c)
+                        .events(completionCompilationDto(c.getEvents()))).toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
@@ -92,8 +88,8 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
         }
 
         Compilation compilation = compilationMapper.newCompilationDtoToCompilation(newCompilationDto);
-        compilation.setEvents(eventRepository.getEventsByIds(newCompilationDto.getEvents().toArray(Long[]::new))
-                .stream().collect(Collectors.toSet()));
+        compilation.setEvents(new HashSet<>(
+                eventRepository.getEventsByIds(newCompilationDto.getEvents().toArray(Long[]::new))));
         compilation = compilationRepository.save(compilation);
 
         CompilationDto compilationDto = compilationMapper.compilationToCompilationDto(compilation);
@@ -110,6 +106,13 @@ public class CompilationServerImpl implements main.java.ru.practicum.service.Com
         Compilation compilation = compilationRepository.getCompilation(compId)
                 .orElseThrow(() -> new NotFoundCompletion(Exceptions.NOT_FOUND_COMPLETION));
         compilationMapper.updateCompilationRequestToCompilation(compilation, updateCompilationRequest);
+
+        if (updateCompilationRequest.getEvents() != null) {
+            compilation.setEvents(new HashSet<>(
+                    eventRepository.getEventsByIds(updateCompilationRequest.getEvents().toArray(Long[]::new))));
+        }
+
+        compilation = compilationRepository.save(compilation);
 
         CompilationDto compilationDto = compilationMapper.compilationToCompilationDto(compilation);
         compilationDto.setEvents(completionCompilationDto(compilation.getEvents()));
