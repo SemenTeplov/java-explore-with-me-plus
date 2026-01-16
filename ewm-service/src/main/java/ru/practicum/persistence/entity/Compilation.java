@@ -38,8 +38,8 @@ public class Compilation {
     String title;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="compilation_to_events",
-            joinColumns=  @JoinColumn(name="compilation_id", referencedColumnName="id"),
-            inverseJoinColumns= @JoinColumn(name="event_id", referencedColumnName="id") )
+    @JoinTable(name = "compilation_to_events",
+            joinColumns = @JoinColumn(name = "compilation_id", referencedColumnName="id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName="id"))
     Set<Event> events;
 }
