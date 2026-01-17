@@ -40,4 +40,11 @@ public class Messages {
     public static final String MESSAGE_CANCEL_REQUEST = "Заявка {} успешно отменена пользователем {}";
     public static final String MESSAGE_GET_REQUESTS = "Найдено {} заявок для пользователя {}";
     public static final String MESSAGE_MISSING_SERVLET_REQUEST_PARAMETER = "Несоответствие параметров при запросе";
+    public static final String MESSAGE_ADD_COMMENT = "Добавление комментария пользователя {} к событию {}";
+    public static final String MESSAGE_UPDATE_COMMENT = "Обновление комментария пользователя {} для события {}, комментарий {}";
+    public static final String MESSAGE_GET_COMMENTS_BY_AUTHOR = "Получение комментариев от автора {}";
+    public static final String MESSAGE_GET_COMMENTS_BY_EVENT = "Получение комментариев к событию {}";
+    public static final String MESSAGE_GET_COMMENT_BY_ID = "Получение комментария по идентификатору {}";
+    public static final String MESSAGE_DELETE_COMMENT = "Удаление комментария {} пользователем {}";
+    public static final String MESSAGE_DELETE_COMMENT_BY_ADMIN = "Удаление комментария {} администратором";
 }
