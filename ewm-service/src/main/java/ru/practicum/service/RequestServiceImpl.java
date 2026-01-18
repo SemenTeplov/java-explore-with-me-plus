@@ -17,6 +17,7 @@ import main.java.ru.practicum.persistence.status.StatusRequest;
 
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.openapi.model.EventFullDto;
 import ru.practicum.openapi.model.EventRequestStatusRequest;
 import ru.practicum.openapi.model.EventRequestStatusUpdateResult;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 import static main.java.ru.practicum.persistence.status.StatusRequest.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;

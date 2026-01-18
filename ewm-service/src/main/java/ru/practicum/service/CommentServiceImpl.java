@@ -12,6 +12,7 @@ import main.java.ru.practicum.mapper.EventMapper;
 import main.java.ru.practicum.mapper.UserMapper;
 import main.java.ru.practicum.persistence.entity.Comment;
 import main.java.ru.practicum.persistence.entity.Event;
+import main.java.ru.practicum.persistence.entity.Request;
 import main.java.ru.practicum.persistence.entity.User;
 import main.java.ru.practicum.persistence.repository.CommentRepository;
 import main.java.ru.practicum.persistence.repository.EventRepository;
@@ -21,6 +22,7 @@ import main.java.ru.practicum.persistence.status.StatusRequest;
 
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import ru.practicum.openapi.model.CommentDto;
 import ru.practicum.openapi.model.EventShortDto;
@@ -35,6 +37,7 @@ import static ru.practicum.openapi.model.EventFullDto.StateEnum.PUBLISHED;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
@@ -107,15 +110,18 @@ public class CommentServiceImpl implements CommentService {
         log.info(Messages.MESSAGE_GET_COMMENTS_BY_AUTHOR, userId);
 
         checkAndGetUser(userId);
+        List<Request> requests = requestRepository.findAll();
 
         return commentRepository.findAllByAuthorId(userId, PageRequest.of(from / size, size))
                 .stream()
                 .map(comment -> {
                     UserShortDto userShort = userMapper.userToUserShortDto(comment.getAuthor());
-                    Long confirmedRequests = requestRepository.countByEventIdAndStatus(
-                            comment.getEvent().getId(), StatusRequest.CONFIRMED.toString());
+                    Long confirmedRequests = requests.stream()
+                            .filter(r -> r.getEvent().equals(comment.getEvent().getId())
+                                    && r.getStatus().equals(StatusRequest.CONFIRMED.toString())).count();
                     EventShortDto eventShort = createEventShortDtoWithConfirmedRequests(
                             comment.getEvent(), confirmedRequests);
+
                     return commentMapper.toCommentDto(comment, userShort, eventShort);
                 })
                 .collect(Collectors.toList());

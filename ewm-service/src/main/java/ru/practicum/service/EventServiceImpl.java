@@ -32,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.openapi.model.EventFullDto;
 import ru.practicum.openapi.model.EventRequestStatusRequest;
 import ru.practicum.openapi.model.EventRequestStatusUpdateResult;
@@ -53,6 +54,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
