@@ -31,4 +31,10 @@ public class Exceptions {
     public static final String EXCEPTION_FIELD_ANNOTATION_NOT_HAS_SPACE = "Поле annotation не может состоять только из пробелов";
     public static final String EXCEPTION_FIELD_DESCRIPTION_NOT_HAS_SPACE = "Поле description не может состоять только из пробелов";
     public static final String EXCEPTION_FIELD_TITLE_NOT_HAS_SPACE = "Поле title не может состоять только из пробелов";
+    public static final String EXCEPTION_COMMENT_NOT_FOUND = "Комментарий с id=%d не найден";
+    public static final String EXCEPTION_COMMENT_NOT_PUBLISHED = "Комментарии доступны только к опубликованным мероприятиям";
+    public static final String EXCEPTION_ONLY_AUTHOR_CAN_EDIT = "Редактировать комментарий может только автор";
+    public static final String EXCEPTION_COMMENT_FOR_OTHER_EVENT = "Этот комментарий относится к другому мероприятию";
+    public static final String EXCEPTION_ONLY_AUTHOR_CAN_DELETE = "Удалить комментарий может только автор";
+    public static final String EXCEPTION_COMMENT_IS_EMPTY = "Текст комментария не может быть пустым";
 }

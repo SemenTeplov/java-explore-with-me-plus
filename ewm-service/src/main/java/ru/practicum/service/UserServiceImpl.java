@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import main.java.ru.practicum.exception.NotFoundException;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.openapi.model.NewUserRequest;
 import ru.practicum.openapi.model.UserDto;
 
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;

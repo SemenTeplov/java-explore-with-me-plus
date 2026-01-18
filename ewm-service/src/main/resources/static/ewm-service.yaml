@@ -1084,3 +1084,292 @@ paths:
             application/json:
               schema:
                 $ref: 'components.yaml#/components/schemas/ApiError'
+
+  #-----Comment-----
+
+  /user/{userId}/comments/{eventId}:
+    post:
+      tags:
+        - Comment
+      summary: Добавление комментария.
+      description: Добавление комментария пользователем.
+      operationId: addComment
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id пользователя.
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id события.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/components/schemas/NewCommentDto'
+      responses:
+        201:
+          description: Комментарий сохранен
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/CommentDto'
+        400:
+          description: Запрос составлен некорректно
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ApiError'
+        404:
+          description: Пользователь или событие не найдено
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ApiError'
+        409:
+          description: Нарушение целостности данных
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ApiError'
+
+  /user/{userId}/comments/{eventId}/{commentId}:
+    patch:
+      tags:
+        - Comment
+      summary: Обнавление комментария.
+      description: Обнавление комментария пользователем.
+      operationId: updateComment
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id пользователя.
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id события.
+        - in: path
+          name: commentId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id комментария.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/components/schemas/NewCommentDto'
+      responses:
+        200:
+          description: Комментарий сохранен
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/CommentDto'
+        400:
+          description: Запрос составлен некорректно
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ApiError'
+        404:
+          description: Пользователь или событие не найдено
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ApiError'
+
+  /user/{userId}/comments:
+    get:
+      tags:
+        - Comment
+      summary: Получение комментария по автору.
+      description: Получение комментария по автору.
+      operationId: getCommentsByAuthor
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id пользователя.
+        - in: query
+          name: from
+          schema:
+            type: integer
+            format: int32
+            default: 0
+          example: "2"
+          description: Количество комментариев, которые нужно пропустить для формирования текущего набора.
+        - in: query
+          name: size
+          schema:
+            type: integer
+            format: int32
+            default: 10
+          example: "12"
+          description: Количество комментариев в наборе.
+      responses:
+        200:
+          description: Комментарии найдены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'components.yaml#/components/schemas/CommentDto'
+        404:
+          description: Пользователь не найден
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ApiError'
+
+  /user/{userId}/comments/{commentId}:
+    delete:
+      tags:
+        - Comment
+      summary: Удаление комментария.
+      description: Удаление комментария пользователем.
+      operationId: deleteComment
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id пользователя.
+        - in: path
+          name: commentId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id комментария.
+      responses:
+        204:
+          description: Комментарий удален
+        404:
+          description: Комментарий не найден
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ApiError'
+
+  /admin/comments/{commentId}:
+    delete:
+      tags:
+        - Comment
+      summary: Удаление комментария.
+      description: Удаление комментария администратором.
+      operationId: deleteCommentByAdmin
+      parameters:
+        - in: path
+          name: commentId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id комментария.
+      responses:
+        204:
+          description: Комментарий удален
+        404:
+          description: Комментарий не найден
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ApiError'
+
+  /comments/event/{eventId}:
+    get:
+      tags:
+        - Comment
+      summary: Получение комментариев.
+      description: Получение комментариев события.
+      operationId: getComments
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id события.
+        - in: query
+          name: from
+          schema:
+            type: integer
+            format: int32
+            default: 0
+          example: "2"
+          description: Количество комментариев, которые нужно пропустить для формирования текущего набора.
+        - in: query
+          name: size
+          schema:
+            type: integer
+            format: int32
+            default: 10
+          example: "12"
+          description: Количество комментариев в наборе.
+      responses:
+        200:
+          description: Комментарии найдены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: 'components.yaml#/components/schemas/CommentDto'
+        404:
+          description: Событие не найдено
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ApiError'
+
+  /comments/{commentId}:
+    get:
+      tags:
+        - Comment
+      summary: Получение комментария.
+      description: Получение комментария по id.
+      operationId: getCommentById
+      parameters:
+        - in: path
+          name: commentId
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: id комментария.
+      responses:
+        200:
+          description: Комментарий найден
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/CommentDto'
+        404:
+          description: Комментарий не найден
+          content:
+            application/json:
+              schema:
+                $ref: 'components.yaml#/components/schemas/ApiError'

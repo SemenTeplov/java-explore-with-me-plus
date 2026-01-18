@@ -35,6 +35,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CompilationServerImpl implements main.java.ru.practicum.service.CompilationServer {
     private final CompilationRepository compilationRepository;

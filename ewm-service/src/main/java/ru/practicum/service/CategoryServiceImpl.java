@@ -14,6 +14,7 @@ import main.java.ru.practicum.persistence.repository.EventRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.openapi.model.CategoryDto;
 import ru.practicum.openapi.model.NewCategoryDto;
 
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
