@@ -581,7 +581,6 @@ components:
         text:
           type: string
           maxLength: 5000
-          minLength: 1;
           example: Какой-то текст
           description: Комментарий
 

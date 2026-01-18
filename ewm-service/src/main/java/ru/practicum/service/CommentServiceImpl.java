@@ -68,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
 
         Long confirmedRequests = requestRepository.countByEventIdAndStatus(eventId, StatusRequest.CONFIRMED.toString());
 
-        return commentMapper.toCommentDto(commentMapper.toComment(newCommentDto, author, event),
+        return commentMapper.toCommentDto(commentRepository.save(commentMapper.toComment(newCommentDto, author, event)),
                 userMapper.userToUserShortDto(author), createEventShortDtoWithConfirmedRequests(event, confirmedRequests));
     }
 
