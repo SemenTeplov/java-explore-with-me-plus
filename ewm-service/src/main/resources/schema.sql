@@ -84,5 +84,8 @@ CREATE TABLE IF NOT EXISTS comments (
     author_id BIGINT REFERENCES users(id) NOT NULL,
     event_id  BIGINT REFERENCES events(id) NOT NULL,
     created   TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    edited    TIMESTAMP WITHOUT TIME ZONE
+    edited    TIMESTAMP WITHOUT TIME ZONE,
+
+    CONSTRAINT fk_on_author FOREIGN KEY (author_id) REFERENCES users (id),
+    CONSTRAINT fk_event FOREIGN KEY (event_id) REFERENCES events (id)
 );
